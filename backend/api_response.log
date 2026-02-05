@@ -1,0 +1,6 @@
+{
+  "status": 400,
+  "data": {
+    "message": "Provider Error: Not enough funds on balance"
+  }
+}
