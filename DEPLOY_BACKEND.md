@@ -19,7 +19,7 @@ You need to push your `backend` folder to a new GitHub repository.
     git add .
     git commit -m "Initial commit"
     git branch -M main
-    git remote add origin https://github.com/YOUR_USERNAME/smm-panel-backend.git
+    git remote add origin https://github.com/ravi-verma-001/smm-panel.git
     git push -u origin main
     ```
     *(Replace `YOUR_USERNAME` with your actual GitHub username)*

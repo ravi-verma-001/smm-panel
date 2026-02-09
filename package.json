@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
     "name": "smm-panel-backend",
     "version": "1.0.0",
     "description": "Backend for SMM Panel",
@@ -21,3 +22,29 @@
         "nodemon": "^3.1.0"
     }
 }
+=======
+  "name": "smm-panel",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "lucide-react": "^0.563.0",
+    "next": "16.1.6",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.6",
+    "typescript": "^5"
+  }
+}
+>>>>>>> ceb87a1e87c0788ee980557d109bb629ae034208
