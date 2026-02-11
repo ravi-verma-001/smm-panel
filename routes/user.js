@@ -13,7 +13,7 @@ router.get('/me', auth, async (req, res) => {
         // Calculate total spent
         const orders = await Order.find({ user: req.user.id });
         const totalSpent = orders.reduce((sum, order) => sum + (order.charge || 0), 0);
-        const totalOrders = orders.length;
+        const totalOrders = orders.filter(order => order.status === 'completed').length;
 
         res.json({
             username: user.username,
