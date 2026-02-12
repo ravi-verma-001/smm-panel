@@ -5,14 +5,14 @@
     width: calc(100% - 260px);
     height: 70px;
     background-color: var(--bg-primary);
-    /* Use primary bg or specific header bg */
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
     display: flex;
     align-items: center;
     padding: 0 2rem;
     z-index: 40;
-    backdrop-filter: blur(10px);
-    background: rgba(11, 14, 20, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.85);
 }
 
 .content {
@@ -33,18 +33,19 @@
     align-items: center;
     gap: 0.5rem;
     padding: 0.5rem 1rem;
-    background: var(--bg-card);
-    border: 1px solid var(--accent-primary);
+    background: linear-gradient(180deg, #059669 0%, #065F46 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: var(--radius-full);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .balanceLabel {
-    color: var(--text-muted);
+    color: rgba(255, 255, 255, 0.9);
     font-size: 0.875rem;
 }
 
 .balanceAmount {
-    color: var(--accent-primary);
+    color: #FFFFFF;
     font-weight: 700;
 }
 
@@ -55,20 +56,31 @@
 }
 
 .iconBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(180deg, #059669 0%, #065F46 100%);
+    border-radius: 50%;
+    color: #FFFFFF;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     position: relative;
-    color: var(--text-secondary);
-    transition: color 0.2s;
 }
 
 .iconBtn:hover {
-    color: var(--text-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }
 
 .badge {
     position: absolute;
-    top: -5px;
-    right: -5px;
-    background: var(--error);
+    top: -2px;
+    right: -2px;
+    background: #FF0000;
     color: white;
     font-size: 0.625rem;
     width: 16px;
@@ -78,6 +90,7 @@
     justify-content: center;
     border-radius: 50%;
     font-weight: 700;
+    border: 1px solid white;
 }
 
 .profile {
@@ -85,23 +98,27 @@
     align-items: center;
     gap: 0.75rem;
     cursor: pointer;
+    padding: 0.25rem 0.75rem 0.25rem 0.25rem;
+    background: linear-gradient(180deg, #059669 0%, #065F46 100%);
+    border-radius: var(--radius-full);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .avatar {
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
-    background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--text-secondary);
+    color: #FFFFFF;
 }
 
 .username {
-    font-weight: 500;
-    color: var(--text-primary);
+    font-weight: 600;
+    color: #FFFFFF;
     font-size: 0.875rem;
 }
 
@@ -118,6 +135,5 @@
 
     .balanceCard {
         display: none;
-        /* Hide balance on mobile or move it */
     }
 }

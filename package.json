@@ -1,23 +1,29 @@
 {
-  "name": "smm-panel-backend",
-  "version": "1.0.0",
-  "description": "Backend for SMM Panel",
-  "main": "server.js",
+  "name": "smm-panel",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js",
-    "build": "echo 'No build step'"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
   },
   "dependencies": {
-    "axios": "^1.13.4",
-    "bcryptjs": "^2.4.3",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.3.2"
+    "lucide-react": "^0.563.0",
+    "next": "16.1.6",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
   },
   "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "autoprefixer": "^10.4.24",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.6",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5",
     "nodemon": "^3.1.0"
   }
 }
