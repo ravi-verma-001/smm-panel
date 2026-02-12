@@ -22,7 +22,7 @@ export default function Navbar() {
                     setBalance(data.walletBalance.toFixed(4));
                 }
             } catch (error) {
-                console.error("Failed to fetch balance", error);
+                console.warn("Failed to fetch balance", error);
             }
         };
 
