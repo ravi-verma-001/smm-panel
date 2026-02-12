@@ -3,7 +3,7 @@ const Order = require('./models/Order');
 const User = require('./models/User');
 const dotenv = require('dotenv');
 
-dotenv.config({ path: './backend/.env' }); // Adjust path if needed
+dotenv.config();
 
 const runVerification = async () => {
     try {
@@ -45,7 +45,6 @@ const runVerification = async () => {
         } else {
             console.log('No orders found for this user.');
         }
-
     } catch (err) {
         console.error('Verification failed:', err);
     } finally {
