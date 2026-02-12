@@ -14,7 +14,7 @@ const providerApi = {
             });
             return response.data;
         } catch (error) {
-            console.error('Provider API Error (getServices):', error.message);
+            console.warn('Provider API Error (getServices):', error.message);
             throw error;
         }
     },
@@ -31,7 +31,7 @@ const providerApi = {
             });
             return response.data;
         } catch (error) {
-            console.error('Provider API Error (addOrder):', error.message);
+            console.warn('Provider API Error (addOrder):', error.message);
             throw error;
         }
     },
@@ -46,7 +46,7 @@ const providerApi = {
             });
             return response.data;
         } catch (error) {
-            console.error('Provider API Error (getOrderStatus):', error.message);
+            console.warn('Provider API Error (getOrderStatus):', error.message);
             throw error;
         }
     },
@@ -60,7 +60,7 @@ const providerApi = {
             });
             return response.data;
         } catch (error) {
-            console.error('Provider API Error (getBalance):', error.message);
+            console.warn('Provider API Error (getBalance):', error.message);
             throw error;
         }
     }
