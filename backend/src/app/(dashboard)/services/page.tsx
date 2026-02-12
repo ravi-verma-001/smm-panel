@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Search, Filter } from "lucide-react";
 import styles from "./page.module.css";
 
@@ -18,10 +18,29 @@ const servicesData = [
 export default function Services() {
     const [search, setSearch] = useState("");
     const [category, setCategory] = useState("All");
+    const [services, setServices] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
 
-    const categories = ["All", ...new Set(servicesData.map(s => s.category))];
+    useEffect(() => {
+        fetchServices();
+    }, []);
 
-    const filteredServices = servicesData.filter(service => {
+    const fetchServices = async () => {
+        try {
+            const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+            const res = await fetch(`${API_URL}/api/services`);
+            const data = await res.json();
+            setServices(data);
+        } catch (error) {
+            console.error("Failed to fetch services", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const categories = ["All", ...new Set(services.map(s => s.category))];
+
+    const filteredServices = services.filter(service => {
         const matchesSearch = service.name.toLowerCase().includes(search.toLowerCase());
         const matchesCategory = category === "All" || service.category === category;
         return matchesSearch && matchesCategory;
@@ -58,35 +77,39 @@ export default function Services() {
             </div>
 
             <div className={styles.tableWrapper}>
-                <table className={styles.table}>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Service</th>
-                            <th>Rate / 1000</th>
-                            <th>Min / Max</th>
-                            <th>Category</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredServices.map(service => (
-                            <tr key={service.id}>
-                                <td className={styles.id}>{service.id}</td>
-                                <td className={styles.name}>{service.name}</td>
-                                <td className={styles.rate}>${service.rate.toFixed(2)}</td>
-                                <td className={styles.limits}>{service.min} / {service.max.toLocaleString()}</td>
-                                <td>
-                                    <span className={styles.categoryBadge}>{service.category}</span>
-                                </td>
-                            </tr>
-                        ))}
-                        {filteredServices.length === 0 && (
+                {loading ? (
+                    <div className="p-8 text-center text-slate-500">Loading services...</div>
+                ) : (
+                    <table className={styles.table}>
+                        <thead>
                             <tr>
-                                <td colSpan={5} className={styles.noResults}>No services found matching your criteria.</td>
+                                <th>ID</th>
+                                <th>Service</th>
+                                <th>Rate / 1000</th>
+                                <th>Min / Max</th>
+                                <th>Category</th>
                             </tr>
-                        )}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {filteredServices.map(service => (
+                                <tr key={service._id}>
+                                    <td className={styles.id}>{service.providerServiceId}</td>
+                                    <td className={styles.name}>{service.name}</td>
+                                    <td className={styles.rate}>₹{service.rate.toFixed(2)}</td>
+                                    <td className={styles.limits}>{service.min} / {service.max.toLocaleString()}</td>
+                                    <td>
+                                        <span className={styles.categoryBadge}>{service.category}</span>
+                                    </td>
+                                </tr>
+                            ))}
+                            {filteredServices.length === 0 && (
+                                <tr>
+                                    <td colSpan={5} className={styles.noResults}>No services found matching your criteria.</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                )}
             </div>
         </div>
     );

@@ -32,14 +32,14 @@ export default function OrderHistory() {
                         </tr>
                     </thead>
                     <tbody>
-                        {ordersData.map((order) => (
+                        {ordersData.slice(0, 1).map((order) => (
                             <tr key={order.id} className={styles.tr}>
                                 <td className={styles.td}>{order.id}</td>
                                 <td className={styles.td}>{order.date}</td>
                                 <td className={styles.td}>{order.service}</td>
                                 <td className={styles.td}>{order.link}</td>
                                 <td className={styles.td}>{order.quantity}</td>
-                                <td className={styles.td}>${order.charge.toFixed(2)}</td>
+                                <td className={styles.td}>₹{order.charge.toFixed(2)}</td>
                                 <td className={styles.td}>
                                     <span className={`${styles.status} ${styles['status' + order.status]}`}>
                                         {order.status}
@@ -49,14 +49,6 @@ export default function OrderHistory() {
                         ))}
                     </tbody>
                 </table>
-            </div>
-
-            <div className={styles.pagination}>
-                <button className={styles.pageBtn} disabled>Previous</button>
-                <button className={`${styles.pageBtn} ${styles.activePage}`}>1</button>
-                <button className={styles.pageBtn}>2</button>
-                <button className={styles.pageBtn}>3</button>
-                <button className={styles.pageBtn}>Next</button>
             </div>
         </div>
     );

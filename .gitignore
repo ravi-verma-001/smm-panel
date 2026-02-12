@@ -65,3 +65,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 >>>>>>> ceb87a1e87c0788ee980557d109bb629ae034208
+
+# Local Netlify folder
+.netlify

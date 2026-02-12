@@ -32,14 +32,17 @@ export default function AddFunds() {
 
     useEffect(() => {
         fetchHistory();
+        const interval = setInterval(fetchHistory, 5000); // Poll every 5 seconds
+        return () => clearInterval(interval);
     }, []);
 
     const fetchHistory = async () => {
         try {
             // Demo user ID header
             const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+            const token = localStorage.getItem("token");
             const res = await fetch(`${API_URL}/api/payments/history`, {
-                headers: { 'x-user-email': 'test@user.com' } // Demo Email
+                headers: { 'Authorization': `Bearer ${token}` }
             });
             const data = await res.json();
             if (res.ok) {
@@ -61,11 +64,12 @@ export default function AddFunds() {
             setLoading(true);
             try {
                 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+                const token = localStorage.getItem("token");
                 const res = await fetch(`${API_URL}/api/payments/create`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        "x-user-email": "test@user.com"
+                        "Authorization": `Bearer ${token}`
                     },
                     body: JSON.stringify({ amount, utr })
                 });
@@ -129,12 +133,12 @@ export default function AddFunds() {
                         )}
 
                         <div className={styles.field}>
-                            <label className={styles.label}>Amount ($)</label>
+                            <label className={styles.label}>Amount (₹)</label>
                             <input
                                 type="number"
                                 value={amount}
                                 onChange={(e) => setAmount(e.target.value)}
-                                placeholder={`Minimum: $${selectedMethod?.min}`}
+                                placeholder={`Minimum: ₹${selectedMethod?.min}`}
                                 min={selectedMethod?.min}
                                 className={styles.input}
                                 required
@@ -164,7 +168,7 @@ export default function AddFunds() {
                         )}
 
                         <button type="submit" className={styles.submitBtn} disabled={loading}>
-                            {loading ? <Loader2 className="animate-spin" /> : `Pay $${Number(amount || 0).toFixed(2)}`}
+                            {loading ? <Loader2 className="animate-spin" /> : `Pay ₹${Number(amount || 0).toFixed(2)}`}
                         </button>
                     </form>
                 </div>
@@ -221,7 +225,7 @@ export default function AddFunds() {
                                     <tr key={tx._id} className="hover:bg-slate-50/50 transition-colors">
                                         <td className="p-4">{new Date(tx.createdAt).toLocaleDateString()}</td>
                                         <td className="p-4 font-mono text-xs">{tx.utr}</td>
-                                        <td className="p-4 font-bold text-slate-900">${tx.amount}</td>
+                                        <td className="p-4 font-bold text-slate-900">₹{tx.amount}</td>
                                         <td className="p-4">
                                             <span className={`px-2 py-1 rounded text-xs font-medium capitalize ${tx.status === 'approved' ? 'bg-green-100 text-green-700' :
                                                 tx.status === 'rejected' ? 'bg-red-100 text-red-700' :

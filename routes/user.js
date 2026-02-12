@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
+const mongoose = require('mongoose');
 
 const auth = require('../middleware/auth');
 const Order = require('../models/Order');
@@ -10,17 +11,32 @@ router.get('/me', auth, async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select('-password');
 
-        // Calculate total spent
-        const orders = await Order.find({ user: req.user.id });
-        const totalSpent = orders.reduce((sum, order) => sum + (order.charge || 0), 0);
-        const totalOrders = orders.filter(order => order.status === 'completed').length;
+        // Optimized aggregation to calculate total spent and orders
+        const stats = await Order.aggregate([
+            { $match: { user: new mongoose.Types.ObjectId(req.user.id) } },
+            {
+                $group: {
+                    _id: null,
+                    totalSpent: { $sum: "$charge" },
+                    completedOrders: {
+                        $sum: { $cond: [{ $eq: ["$status", "completed"] }, 1, 0] }
+                    }
+                }
+            }
+        ]);
+
+        const safeStats = stats.length > 0 ? stats[0] : { totalSpent: 0, completedOrders: 0 };
+
+
 
         res.json({
             username: user.username,
             email: user.email,
             walletBalance: user.walletBalance,
-            totalSpent,
-            totalOrders,
+            totalSpent: safeStats.totalSpent,
+            totalOrders: safeStats.completedOrders, // Original code used 'completed' orders count as 'totalOrders' response field?
+            // Original: const totalOrders = orders.filter(order => order.status === 'completed').length;
+            // Response: totalOrders
             isAdmin: user.isAdmin
         });
     } catch (err) {

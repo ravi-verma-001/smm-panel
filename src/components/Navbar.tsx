@@ -27,8 +27,8 @@ export default function Navbar() {
         };
 
         fetchBalance();
-        // Poll every 5 seconds to keep updated
-        const interval = setInterval(fetchBalance, 5000);
+        // Poll every 30 seconds to keep updated
+        const interval = setInterval(fetchBalance, 30000);
         return () => clearInterval(interval);
     }, []);
 
