@@ -55,7 +55,6 @@ export default function Sidebar() {
                             <Link
                                 key={item.href}
                                 href={item.href}
-                                prefetch={false}
                                 className={`${styles.link} ${isActive ? styles.active : ""}`}
                                 onClick={closeSidebar}
                             >

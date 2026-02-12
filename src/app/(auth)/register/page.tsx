@@ -16,11 +16,6 @@ export default function Register() {
     const [loading, setLoading] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData({ ...formData, [e.target.type === "text" && e.target.placeholder === "John Doe" ? "username" : e.target.type]: e.target.value });
-        // Correcting the change handler logic below in the input fields directly is cleaner
-    };
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
@@ -51,7 +46,7 @@ export default function Register() {
             } else {
                 setError(data.message || "Registration failed");
             }
-        } catch (err) {
+        } catch {
             setError("Something went wrong. Please try again.");
         } finally {
             setLoading(false);

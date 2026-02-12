@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Copy, AlertCircle } from "lucide-react";
+import { useState, useEffect, useMemo } from "react";
+import { AlertCircle } from "lucide-react";
 import styles from "./page.module.css";
 
 interface Service {
@@ -48,7 +48,10 @@ export default function NewOrder() {
     }, []);
 
     const categories = [...new Set(services.map(s => s.category))];
-    const filteredServices = services.filter(s => s.category === category);
+
+    const filteredServices = useMemo(() => {
+        return services.filter(s => s.category === category);
+    }, [services, category]);
 
     // Auto-select first service when category changes
     useEffect(() => {
@@ -57,7 +60,7 @@ export default function NewOrder() {
         } else {
             setSelectedServiceId("");
         }
-    }, [category, services]);
+    }, [filteredServices]);
 
     const selectedService = services.find(s => s.providerServiceId.toString() === selectedServiceId) || filteredServices[0];
 
@@ -102,7 +105,7 @@ export default function NewOrder() {
             } else {
                 setMessage({ type: 'error', text: data.message || "Order Failed" });
             }
-        } catch (error) {
+        } catch {
             setMessage({ type: 'error', text: "Server connection failed" });
         } finally {
             setLoading(false);
