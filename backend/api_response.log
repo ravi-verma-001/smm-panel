@@ -1,6 +1,6 @@
 {
-  "status": 400,
+  "status": 404,
   "data": {
-    "message": "Provider Error: Not enough funds on balance"
+    "message": "Service not found in database. Please contact admin."
   }
 }

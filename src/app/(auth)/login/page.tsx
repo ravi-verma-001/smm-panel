@@ -33,7 +33,7 @@ export default function Login() {
             } else {
                 setError(data.message || "Invalid credentials");
             }
-        } catch (err) {
+        } catch {
             setError("Something went wrong. Please try again.");
         } finally {
             setLoading(false);
@@ -94,7 +94,7 @@ export default function Login() {
                 </form>
 
                 <p className={styles.footer}>
-                    Don't have an account?
+                    Don&apos;t have an account?
                     <Link href="/register" className={styles.link}>
                         Sign Up
                     </Link>

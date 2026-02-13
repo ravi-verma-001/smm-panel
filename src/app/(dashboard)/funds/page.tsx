@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { CreditCard, ShieldCheck, AlertCircle, QrCode, Loader2, History } from "lucide-react";
+import { ShieldCheck, AlertCircle, Loader2, History } from "lucide-react";
 import styles from "./page.module.css";
 import Image from "next/image";
 
@@ -84,7 +84,7 @@ export default function AddFunds() {
                 } else {
                     alert(data.message || "Failed to submit request");
                 }
-            } catch (error) {
+            } catch {
                 alert("Server error");
             } finally {
                 setLoading(false);

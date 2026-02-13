@@ -26,19 +26,13 @@ router.get('/me', auth, async (req, res) => {
         ]);
 
         const safeStats = stats.length > 0 ? stats[0] : { totalSpent: 0, completedOrders: 0 };
-
-        res.json({
-            username: user.username,
-            email: user.email,
-            walletBalance: user.walletBalance,
-            totalSpent: safeStats.totalSpent,
-            totalOrders: safeStats.completedOrders,
+        totalOrders: safeStats.completedOrders,
             isAdmin: user.isAdmin
-        });
+    });
     } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server Error');
-    }
+    console.error(err.message);
+    res.status(500).send('Server Error');
+}
 });
 
 module.exports = router;
