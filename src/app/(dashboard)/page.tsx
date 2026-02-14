@@ -71,7 +71,7 @@ export default function Dashboard() {
                 });
                 const data = await res.json();
                 if (res.ok) {
-                    setBalance(data.walletBalance.toFixed(2));
+                    setBalance(data.user?.walletBalance?.toFixed(2) || "0.00");
                     setTotalSpent(data.totalSpent?.toFixed(2) || "0.00");
                     setTotalOrders(data.totalOrders?.toLocaleString() || "0");
                 }

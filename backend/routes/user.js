@@ -28,9 +28,7 @@ router.get('/me', auth, async (req, res) => {
         const safeStats = stats.length > 0 ? stats[0] : { totalSpent: 0, completedOrders: 0 };
 
         res.json({
-            username: user.username,
-            email: user.email,
-            walletBalance: user.walletBalance,
+            user,
             totalSpent: safeStats.totalSpent,
             totalOrders: safeStats.completedOrders,
             isAdmin: user.isAdmin

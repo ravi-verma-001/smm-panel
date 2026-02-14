@@ -79,11 +79,12 @@ export default function NewOrder() {
 
         try {
             const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+            const token = localStorage.getItem("token");
             const res = await fetch(`${API_URL}/api/orders/create`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "x-user-email": "test@user.com" // Demo Auth
+                    "Authorization": `Bearer ${token}`
                 },
                 body: JSON.stringify({
                     serviceId: selectedService.providerServiceId, // Send Provider ID
@@ -146,7 +147,7 @@ export default function NewOrder() {
                                 >
                                     {filteredServices.map(service => (
                                         <option key={service._id} value={service.providerServiceId}>
-                                            {service.providerServiceId} - {service.name} - ${service.rate.toFixed(2)}
+                                            {service.providerServiceId} - {service.name} - ₹{service.rate.toFixed(2)}
                                         </option>
                                     ))}
                                 </select>
@@ -181,7 +182,7 @@ export default function NewOrder() {
 
                         <div className={styles.chargeBox}>
                             <span className={styles.chargeLabel}>Total Charge</span>
-                            <span className={styles.chargeValue}>${charge.toFixed(2)}</span>
+                            <span className={styles.chargeValue}>₹{charge.toFixed(2)}</span>
                         </div>
 
                         <button type="submit" className={styles.submitBtn} disabled={loading}>
@@ -198,7 +199,7 @@ export default function NewOrder() {
                         </div>
                         <div className={styles.description}>
                             <p><strong>Service:</strong> {selectedService?.name || 'Select a service'}</p>
-                            <p><strong>Rate per 1000:</strong> ${selectedService?.rate.toFixed(2) || '0.00'}</p>
+                            <p><strong>Rate per 1000:</strong> ₹{selectedService?.rate.toFixed(2) || '0.00'}</p>
                             <p><strong>Min/Max Order:</strong> {selectedService?.min || 0} / {selectedService?.max.toLocaleString() || 0}</p>
                             <div className={styles.divider} />
                             <p className={styles.note}>

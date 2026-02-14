@@ -10,6 +10,8 @@ const runVerification = async () => {
         await mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/smmpanel');
         console.log('MongoDB Connected');
 
+        // cached user id from previous interactions or fetch one
+        // Let's try to find a user with orders
         const user = await User.findOne();
         if (!user) {
             console.log('No users found to test.');
@@ -37,6 +39,12 @@ const runVerification = async () => {
         console.log(`Aggregation took ${duration}ms`);
         console.log('Stats:', stats);
 
+        if (stats.length > 0) {
+            console.log('Total Spent:', stats[0].totalSpent);
+            console.log('Completed Orders:', stats[0].completedOrders);
+        } else {
+            console.log('No orders found for this user.');
+        }
     } catch (err) {
         console.error('Verification failed:', err);
     } finally {

@@ -11,17 +11,18 @@ import {
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
 import styles from "./page.module.css";
 
 const stats = [
     {
         label: "Available Balance",
-        value: "$1,240.50",
+        value: "₹0.00",
         icon: Wallet,
     },
     {
         label: "Total Spent",
-        value: "$5,320.00",
+        value: "₹5,320.00",
         icon: CreditCard,
     },
     {
@@ -55,18 +56,24 @@ const news = [
 ];
 
 export default function Dashboard() {
+    const { user } = useAuth();
     const [balance, setBalance] = useState("0.00");
+    const [totalSpent, setTotalSpent] = useState("0.00");
+    const [totalOrders, setTotalOrders] = useState("0");
 
     useEffect(() => {
         const fetchBalance = async () => {
             try {
+                const token = localStorage.getItem("token");
                 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
                 const res = await fetch(`${API_URL}/api/user/me`, {
-                    headers: { 'x-user-email': 'test@user.com' }
+                    headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const data = await res.json();
                 if (res.ok) {
                     setBalance(data.walletBalance.toFixed(2));
+                    setTotalSpent(data.totalSpent?.toFixed(2) || "0.00");
+                    setTotalOrders(data.totalOrders?.toLocaleString() || "0");
                 }
             } catch (error) {
                 console.error("Failed to fetch balance", error);
@@ -76,15 +83,18 @@ export default function Dashboard() {
         fetchBalance();
     }, []);
 
-    // Update stats with live balance
-    const liveStats = stats.map(s =>
-        s.label === "Available Balance" ? { ...s, value: `$${balance}` } : s
-    );
+    // Update stats with live data
+    const liveStats = stats.map(s => {
+        if (s.label === "Available Balance") return { ...s, value: `₹${balance}` };
+        if (s.label === "Total Spent") return { ...s, value: `₹${totalSpent}` };
+        if (s.label === "Total Orders") return { ...s, value: totalOrders };
+        return s;
+    });
 
     return (
         <div className={styles.container}>
             <div className={styles.welcomeSection}>
-                <h1 className={styles.welcomeTitle}>Welcome back, Raviv!</h1>
+                <h1 className={styles.welcomeTitle}>Welcome back, {user?.username || "Admin"}!</h1>
                 <p className={styles.apiLink}>API Key: ******************** <button style={{ color: 'var(--accent-primary)', marginLeft: '8px' }}>Copy</button></p>
             </div>
 

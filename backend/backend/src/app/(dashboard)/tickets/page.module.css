@@ -96,3 +96,70 @@
     background: rgba(88, 94, 110, 0.1);
     color: var(--text-muted);
 }
+
+.contactSection {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.contactCard {
+    flex: 1;
+    min-width: 300px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.contactCard:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.whatsapp {
+    border-left: 4px solid #25D366;
+}
+
+.email {
+    border-left: 4px solid #EA4335;
+}
+
+.iconWrapper {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.whatsapp .iconWrapper {
+    background: rgba(37, 211, 102, 0.1);
+    color: #25D366;
+}
+
+.email .iconWrapper {
+    background: rgba(234, 67, 53, 0.1);
+    color: #EA4335;
+}
+
+.contactInfo h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.25rem 0;
+}
+
+.contactInfo p {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin: 0;
+}

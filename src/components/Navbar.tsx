@@ -19,7 +19,7 @@ export default function Navbar() {
                 });
                 const data = await res.json();
                 if (res.ok) {
-                    setBalance(data.walletBalance.toFixed(4));
+                    setBalance(data.user?.walletBalance?.toFixed(2) || "0.00");
                 }
             } catch (error) {
                 console.warn("Failed to fetch balance", error);

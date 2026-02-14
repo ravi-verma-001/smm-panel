@@ -1,5 +1,6 @@
 import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
+import AuthGuard from "@/components/AuthGuard";
 import styles from "./layout.module.css";
 
 export default function DashboardLayout({
@@ -12,7 +13,9 @@ export default function DashboardLayout({
             <Sidebar />
             <Navbar />
             <main className={styles.mainWrapper}>
-                {children}
+                <AuthGuard>
+                    {children}
+                </AuthGuard>
             </main>
         </>
     );

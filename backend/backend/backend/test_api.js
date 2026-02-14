@@ -1,8 +1,8 @@
 const dotenv = require('dotenv');
+dotenv.config();
+
 // Adjust path to point to the correct location of japApi.js (now providerApi)
 const providerApi = require('./utils/japApi');
-
-dotenv.config();
 
 console.log("Testing Provider API connection...");
 console.log("URL:", process.env.SMM_API_URL);
