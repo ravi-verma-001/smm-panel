@@ -101,12 +101,15 @@ router.post('/create', demoAuthMiddleware, async (req, res) => {
         } catch (providerError) {
             console.warn("Provider Order Failed:", providerError.response ? providerError.response.data : providerError.message);
             // Don't deduct balance if provider fails!
-            return res.status(500).json({ message: 'Failed to place order with provider.' });
+            return res.status(500).json({
+                message: 'Failed to place order with provider.',
+                details: providerError.response ? providerError.response.data : providerError.message
+            });
         }
 
     } catch (err) {
         console.error(err);
-        res.status(500).json({ message: 'Server Error' });
+        res.status(500).json({ message: 'Server Error', details: err.message });
     }
 });
 
