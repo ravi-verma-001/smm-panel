@@ -1,6 +1,0 @@
-{
-  "status": 404,
-  "data": {
-    "message": "Service not found in database. Please contact admin."
-  }
-}
