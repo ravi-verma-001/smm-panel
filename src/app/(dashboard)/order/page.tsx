@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, X } from "lucide-react";
+import Link from "next/link";
 import styles from "./page.module.css";
 
 interface Service {
@@ -23,14 +24,30 @@ export default function NewOrder() {
     const [link, setLink] = useState("");
     const [quantity, setQuantity] = useState<number | "">("");
     const [charge, setCharge] = useState(0);
+    const [balance, setBalance] = useState(0);
+    const [showLowBalanceModal, setShowLowBalanceModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
     // Fetch Services on Load
     useEffect(() => {
-        const fetchServices = async () => {
+        const fetchServicesAndBalance = async () => {
             try {
                 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+                const token = localStorage.getItem("token");
+
+                // Fetch Balance
+                if (token) {
+                    const userRes = await fetch(`${API_URL}/api/user/me`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    const userData = await userRes.json();
+                    if (userRes.ok && userData.user) {
+                        setBalance(userData.user.walletBalance || 0);
+                    }
+                }
+
+                // Fetch Services
                 const res = await fetch(`${API_URL}/api/services`);
                 const data = await res.json();
                 if (res.ok) {
@@ -42,10 +59,10 @@ export default function NewOrder() {
                     }
                 }
             } catch (error) {
-                console.error("Failed to fetch services", error);
+                console.error("Failed to fetch data", error);
             }
         };
-        fetchServices();
+        fetchServicesAndBalance();
     }, []);
 
     const categories = [...new Set(services.map(s => s.category))];
@@ -80,6 +97,13 @@ export default function NewOrder() {
         setMessage(null);
 
         if (!selectedService) return;
+
+        // Check wallet balance
+        if (charge > balance) {
+            setLoading(false);
+            setShowLowBalanceModal(true);
+            return;
+        }
 
         try {
             const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
@@ -116,6 +140,48 @@ export default function NewOrder() {
     return (
         <div className={styles.container}>
             <h1 className={styles.title}>New Order</h1>
+
+            {/* Low Balance Modal */}
+            {showLowBalanceModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 px-4">
+                    <div className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
+                        <div className="flex justify-between items-center p-5 border-b border-gray-100">
+                            <div className="flex items-center gap-2 text-red-600">
+                                <AlertCircle size={22} />
+                                <h3 className="text-lg font-semibold">Low Balance</h3>
+                            </div>
+                            <button
+                                onClick={() => setShowLowBalanceModal(false)}
+                                className="text-gray-400 hover:text-gray-600 transition"
+                            >
+                                <X size={20} />
+                            </button>
+                        </div>
+                        <div className="p-6">
+                            <p className="text-gray-600 text-[15px] mb-4">
+                                Your current wallet balance is <strong className="text-gray-900">₹{balance.toFixed(2)}</strong>, but this order requires <strong className="text-gray-900">₹{charge.toFixed(2)}</strong>.
+                            </p>
+                            <p className="text-gray-600 text-[15px] mb-6">
+                                Please recharge your wallet to proceed with this service.
+                            </p>
+                            <div className="flex gap-3 justify-end">
+                                <button
+                                    onClick={() => setShowLowBalanceModal(false)}
+                                    className="px-5 py-2.5 rounded-lg text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 transition"
+                                >
+                                    Cancel
+                                </button>
+                                <Link
+                                    href="/add-funds"
+                                    className="px-5 py-2.5 rounded-lg text-sm font-medium text-white bg-green-600 hover:bg-green-700 transition"
+                                >
+                                    Add Funds Now
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {message && (
                 <div className={`p-4 mb-4 rounded-lg text-sm font-medium ${message.type === 'success' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
