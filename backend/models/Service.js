@@ -8,6 +8,7 @@ const serviceSchema = new mongoose.Schema({
     min: { type: Number, required: true },
     max: { type: Number, required: true },
     type: { type: String, default: 'default' }, // default, custom_comments, etc.
+    averageTime: { type: String, default: '30 mins - 1 hour' }, // Global default average time
     active: { type: Boolean, default: true }
 });
 

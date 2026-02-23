@@ -18,6 +18,13 @@ router.get('/', async (req, res) => {
 // User can just visit /api/services/forcesync in their browser
 router.get('/forcesync', async (req, res) => {
     try {
+        console.log('Fetching existing services to preserve custom average times...');
+        const existingServices = await Service.find({});
+        const timeMap = {};
+        existingServices.forEach(s => {
+            if (s.averageTime) timeMap[s.providerServiceId] = s.averageTime;
+        });
+
         console.log('Clearing existing services...');
         await Service.deleteMany({});
         console.log('All existing services deleted.');
@@ -53,6 +60,7 @@ router.get('/forcesync', async (req, res) => {
             min: parseInt(pService.min),
             max: parseInt(pService.max),
             type: pService.type,
+            averageTime: timeMap[pService.service] || '30 mins - 1 hour', // Preserve custom time or set default
             active: true
         }));
 

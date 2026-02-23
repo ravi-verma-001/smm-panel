@@ -87,6 +87,7 @@ export default function Services() {
                                 <th>Service</th>
                                 <th>Rate / 1000</th>
                                 <th>Min / Max</th>
+                                <th>Average Time</th>
                                 <th>Category</th>
                             </tr>
                         </thead>
@@ -97,6 +98,7 @@ export default function Services() {
                                     <td className={styles.name}>{service.name}</td>
                                     <td className={styles.rate}>₹{service.rate.toFixed(2)}</td>
                                     <td className={styles.limits}>{service.min} / {service.max.toLocaleString()}</td>
+                                    <td className={styles.time}>{service.averageTime || '30 mins - 1 hour'}</td>
                                     <td>
                                         <span className={styles.categoryBadge}>{service.category}</span>
                                     </td>

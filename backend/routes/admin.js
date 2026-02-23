@@ -79,4 +79,27 @@ router.post('/payments/reject/:id', authMiddleware, async (req, res) => {
     }
 });
 
+});
+
+// Update Service Average Time
+router.put('/services/:id/time', authMiddleware, async (req, res) => {
+    try {
+        const { averageTime } = req.body;
+        const Service = require('../models/Service'); // Import here as it's not at the top
+
+        const service = await Service.findById(req.params.id);
+        if (!service) {
+            return res.status(404).json({ message: 'Service not found' });
+        }
+
+        service.averageTime = averageTime;
+        await service.save();
+
+        res.json({ message: 'Service average time updated', service });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
 module.exports = router;

@@ -13,6 +13,7 @@ interface Service {
     max: number;
     category: string;
     type: string;
+    averageTime?: string;
 }
 
 export default function NewOrder() {
@@ -203,6 +204,7 @@ export default function NewOrder() {
                         <div className={styles.description}>
                             <p><strong>Service:</strong> {selectedService?.name || 'Select a service'}</p>
                             <p><strong>Rate per 1000:</strong> ₹{selectedService?.rate.toFixed(2) || '0.00'}</p>
+                            <p><strong>Average Time:</strong> {selectedService?.averageTime || '30 mins - 1 hour'}</p>
                             <p><strong>Min/Max Order:</strong> {selectedService?.min || 0} / {selectedService?.max.toLocaleString() || 0}</p>
                             <div className={styles.divider} />
                             <p className={styles.note}>

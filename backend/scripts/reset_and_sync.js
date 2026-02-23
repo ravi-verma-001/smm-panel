@@ -13,6 +13,13 @@ const resetAndSync = async () => {
         await mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/smmpanel');
         console.log('MongoDB Connected');
 
+        console.log('Fetching existing services to preserve custom average times...');
+        const existingServices = await Service.find({});
+        const timeMap = {};
+        existingServices.forEach(s => {
+            if (s.averageTime) timeMap[s.providerServiceId] = s.averageTime;
+        });
+
         // 1. Clear existing services
         console.log('Clearing existing services...');
         await Service.deleteMany({});
@@ -60,6 +67,7 @@ const resetAndSync = async () => {
                 min: parseInt(pService.min),
                 max: parseInt(pService.max),
                 type: pService.type,
+                averageTime: timeMap[pService.service] || '30 mins - 1 hour', // Preserve custom time or set default
                 active: true
             }));
 
