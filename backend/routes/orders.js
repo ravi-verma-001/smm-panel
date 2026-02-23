@@ -52,7 +52,7 @@ router.post('/create', demoAuthMiddleware, async (req, res) => {
         console.log(`[ORDER] Balance Before: ${user.walletBalance}`);
 
         if (user.walletBalance < charge) {
-            return res.status(400).json({ message: `Insufficient balance. Required: $${charge.toFixed(4)}` });
+            return res.status(400).json({ message: `Insufficient balance. Required: ₹${charge.toFixed(2)}` });
         }
 
         // D. Validate Min/Max
