@@ -79,8 +79,6 @@ router.post('/payments/reject/:id', authMiddleware, async (req, res) => {
     }
 });
 
-});
-
 // Update Service Average Time
 router.put('/services/:id/time', authMiddleware, async (req, res) => {
     try {
