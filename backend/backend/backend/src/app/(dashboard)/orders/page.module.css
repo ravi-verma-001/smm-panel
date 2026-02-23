@@ -1,0 +1,119 @@
+.container {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.tableContainer {
+    overflow-x: auto;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 800px;
+}
+
+.th {
+    text-align: left;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 0.875rem;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    font-size: 0.925rem;
+}
+
+.tr:last-child .td {
+    border-bottom: none;
+}
+
+.tr:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.status {
+    display: inline-flex;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.statusCompleted {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+}
+
+.statusPending {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--warning);
+}
+
+.statusProcessing {
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--accent-primary);
+}
+
+.statusCanceled {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--error);
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+}
+
+.pageBtn {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    transition: all 0.2s;
+}
+
+.pageBtn:hover:not(:disabled) {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+.pageBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.activePage {
+    background: var(--accent-primary);
+    color: white;
+    border-color: var(--accent-primary);
+}
+
+.activePage:hover {
+    background: var(--accent-hover);
+}
