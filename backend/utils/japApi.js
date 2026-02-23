@@ -1,32 +1,26 @@
 const axios = require('axios');
 
-// We now use ScraperAPI as a middleman to bypass Cloudflare
-const SCRAPER_API_KEY = process.env.SCRAPER_API_KEY; // User needs to add this
-const API_URL = process.env.SMM_API_URL || 'https://smmfollows.com/api/v2';
+const API_URL = process.env.SMM_API_URL || 'https://likeradda.in/api/v2';
 
-// Helper function to send requests via ScraperAPI
-const sendViaScraperApi = async (payload) => {
-    if (!SCRAPER_API_KEY) {
-        throw new Error('SCRAPER_API_KEY is missing in environment variables. Please add it to use Cloudflare bypass.');
-    }
-
-    // Connect through ScraperAPI Proxy Mode (Standard for Axios)
-    // SMM panels block the standard ScraperAPI endpoint because it modifies origin headers
-    // We add premium=true to use residential proxies which are less likely to be blocked 
+// Helper function to send requests bypassing Cloudflare manually
+const sendRequest = async (payload) => {
+    // We send data as form data as panels often block application/json
     const formData = new URLSearchParams(payload);
 
     const response = await axios.post(API_URL, formData, {
-        proxy: {
-            protocol: 'http',
-            host: 'proxy-server.scraperapi.com',
-            port: 3128,
-            auth: {
-                username: 'scraperapi.premium=true.render=true.keep_headers=true',
-                password: SCRAPER_API_KEY
-            }
-        },
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded' // Panels love forms, hate JSON
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+            'Accept': 'application/json, text/plain, */*',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Origin': 'https://likeradda.in',
+            'Referer': 'https://likeradda.in/',
+            'Sec-Ch-Ua': '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
+            'Sec-Ch-Ua-Mobile': '?0',
+            'Sec-Ch-Ua-Platform': '"Windows"',
+            'Sec-Fetch-Dest': 'empty',
+            'Sec-Fetch-Mode': 'cors',
+            'Sec-Fetch-Site': 'same-origin'
         }
     });
 
@@ -37,7 +31,8 @@ const providerApi = {
     // 1. Get Services
     getServices: async () => {
         try {
-            return await sendViaScraperApi({
+            console.log(`[API] Fetching services from provider: ${API_URL}`);
+            return await sendRequest({
                 key: process.env.SMM_API_KEY,
                 action: 'services'
             });
@@ -50,7 +45,8 @@ const providerApi = {
     // 2. Add Order
     addOrder: async (serviceId, link, quantity) => {
         try {
-            return await sendViaScraperApi({
+            console.log(`[API] Sending new order to provider: ${API_URL}`);
+            return await sendRequest({
                 key: process.env.SMM_API_KEY,
                 action: 'add',
                 service: serviceId,
@@ -66,7 +62,8 @@ const providerApi = {
     // 3. Get Order Status
     getOrderStatus: async (orderId) => {
         try {
-            return await sendViaScraperApi({
+            console.log(`[API] Fetching order status from provider: ${API_URL}`);
+            return await sendRequest({
                 key: process.env.SMM_API_KEY,
                 action: 'status',
                 order: orderId
@@ -80,7 +77,8 @@ const providerApi = {
     // 4. Get Balance
     getBalance: async () => {
         try {
-            return await sendViaScraperApi({
+            console.log(`[API] Fetching balance from provider: ${API_URL}`);
+            return await sendRequest({
                 key: process.env.SMM_API_KEY,
                 action: 'balance'
             });
@@ -92,5 +90,3 @@ const providerApi = {
 };
 
 module.exports = providerApi;
-
-
