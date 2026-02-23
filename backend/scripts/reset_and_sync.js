@@ -37,13 +37,26 @@ const resetAndSync = async () => {
         // 3. Insert new services
         let count = 0;
 
-        // Use raw rate as requested by user ("dont multiply the price")
+        // Fetch live USD to INR exchange rate dynamically
+        let exchangeRate = parseFloat(process.env.EXCHANGE_RATE) || 85;
+        try {
+            const axios = require('axios');
+            console.log('Fetching live USD to INR exchange rate...');
+            const rateResponse = await axios.get('https://api.exchangerate-api.com/v4/latest/USD');
+            if (rateResponse.data && rateResponse.data.rates && rateResponse.data.rates.INR) {
+                exchangeRate = parseFloat(rateResponse.data.rates.INR);
+                console.log(`Live Exchange Rate Applied: 1 USD = ₹${exchangeRate}`);
+            }
+        } catch (err) {
+            console.warn(`Failed to fetch live exchange rate, using fallback (₹${exchangeRate}):`, err.message);
+        }
+
         const finalServices = providerServices
             .map(pService => ({
                 providerServiceId: pService.service,
                 name: pService.name,
                 category: pService.category,
-                rate: parseFloat(pService.rate), // Raw API rate
+                rate: parseFloat(pService.rate) * exchangeRate * 1.30, // Convert to INR and add 30% margin
                 min: parseInt(pService.min),
                 max: parseInt(pService.max),
                 type: pService.type,
