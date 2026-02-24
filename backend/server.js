@@ -10,7 +10,7 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(cors({
-    origin: ['https://incredible-ganache-d5dce2.netlify.app', 'http://localhost:3000', 'http://localhost:3001'],
+    origin: ['https://incredible-ganache-d5dce2.netlify.app', 'http://localhost:3000', 'http://localhost:3001', 'https://dovixsmm.com', 'https://www.dovixsmm.com'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
