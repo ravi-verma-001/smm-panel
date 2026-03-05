@@ -7,24 +7,10 @@ const providerApi = require('../utils/japApi'); // Actually generic providerApi 
 // Alias for consistency if code uses japApi
 const japApi = providerApi;
 
-// Middleware for demo auth (same as payments.js, should be centralized ideally)
-const demoAuthMiddleware = async (req, res, next) => {
-    try {
-        const userEmail = req.headers['x-user-email'] || 'test@user.com';
-        let user = await User.findOne({ email: userEmail });
-        if (!user) {
-            user = new User({ username: 'TestUser', email: userEmail, walletBalance: 0 });
-            await user.save();
-        }
-        req.user = user;
-        next();
-    } catch (err) {
-        res.status(500).json({ message: 'Auth Error' });
-    }
-};
+const auth = require('../middleware/auth');
 
 // 1. Place New Order
-router.post('/create', demoAuthMiddleware, async (req, res) => {
+router.post('/create', auth, async (req, res) => {
     const { serviceId, link, quantity } = req.body;
 
     // Validate Input
@@ -44,11 +30,11 @@ router.post('/create', demoAuthMiddleware, async (req, res) => {
         // B. Calculate Cost
         const charge = (service.rate * quantity) / 1000;
 
-        console.log(`[ORDER] User: ${req.user.email} | Service: ${service.name} | Rate: ${service.rate} | Qty: ${quantity}`);
-        console.log(`[ORDER] Calculated Charge: ${charge}`);
-
         // C. Check User Balance
-        const user = await User.findById(req.user._id);
+        const user = await User.findById(req.user.id);
+
+        console.log(`[ORDER] User: ${user.email} | Service: ${service.name} | Rate: ${service.rate} | Qty: ${quantity}`);
+        console.log(`[ORDER] Calculated Charge: ${charge}`);
         console.log(`[ORDER] Balance Before: ${user.walletBalance}`);
 
         if (user.walletBalance < charge) {
