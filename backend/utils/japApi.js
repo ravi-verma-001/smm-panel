@@ -10,6 +10,8 @@ const sendRequest = async (payload) => {
     const urlObj = new URL(API_URL);
     const origin = urlObj.origin;
 
+    console.log(`[API] sendRequest exactly hitting: ${API_URL}`);
+
     const response = await axios.post(API_URL, formData, {
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
