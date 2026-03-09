@@ -96,4 +96,44 @@ router.post('/create', auth, async (req, res) => {
     }
 });
 
+// 2. Get Order History
+router.get('/history', auth, async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        // Auto-Sync pending orders with SMM Provider
+        try {
+            const pendingOrders = await Order.find({
+                user: userId,
+                status: { $in: ['pending', 'processing', 'inprogress', 'in progress'] }
+            });
+
+            for (const order of pendingOrders) {
+                if (order.externalOrderId) {
+                    const providerStatus = await japApi.getOrderStatus(order.externalOrderId);
+                    if (providerStatus && providerStatus.status) {
+                        const newStatus = providerStatus.status.toLowerCase();
+                        if (order.status !== newStatus) {
+                            order.status = newStatus;
+                            await order.save();
+                        }
+                    }
+                }
+            }
+        } catch (syncError) {
+            console.error("Order sync background error:", syncError);
+            // Continue fetching history even if sync fails
+        }
+
+        const orders = await Order.find({ user: userId })
+            .populate('service', 'name category type averageTime')
+            .sort({ createdAt: -1 });
+
+        res.json(orders);
+    } catch (err) {
+        console.error("Order history fetch error:", err);
+        res.status(500).json({ message: 'Server error fetching orders history' });
+    }
+});
+
 module.exports = router;

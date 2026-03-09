@@ -113,4 +113,19 @@ router.post('/create', demoAuthMiddleware, async (req, res) => {
     }
 });
 
+// 2. Get Order History
+router.get('/history', demoAuthMiddleware, async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const orders = await Order.find({ user: userId })
+            .populate('service', 'name category type') // Populate relevant service info
+            .sort({ createdAt: -1 }); // Newest first
+
+        res.json(orders);
+    } catch (err) {
+        console.error("Order history fetch error:", err);
+        res.status(500).json({ message: 'Server error fetching orders history' });
+    }
+});
+
 module.exports = router;
