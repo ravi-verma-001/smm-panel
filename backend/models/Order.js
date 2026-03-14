@@ -7,6 +7,7 @@ const orderSchema = new mongoose.Schema({
     link: { type: String, required: true },
     quantity: { type: Number, required: true },
     charge: { type: Number, required: true }, // Amount deducted from user
+    apiCost: { type: Number, required: true }, // Amount paid to provider
     start_count: { type: Number },
     remains: { type: Number },
     status: {

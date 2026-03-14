@@ -5,6 +5,7 @@ const serviceSchema = new mongoose.Schema({
     name: { type: String, required: true },
     category: { type: String, required: true },
     rate: { type: Number, required: true }, // Your selling price
+    originalRate: { type: Number, required: true }, // Provider cost price in INR
     min: { type: Number, required: true },
     max: { type: Number, required: true },
     type: { type: String, default: 'default' }, // default, custom_comments, etc.

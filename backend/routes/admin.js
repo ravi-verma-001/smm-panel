@@ -1,8 +1,37 @@
 const express = require('express');
 const router = express.Router();
+console.log('--- ADMIN ROUTES FILE LOADED: c:\\Users\\raviv\\OneDrive\\Desktop\\SMMPANEL\\backend\\routes\\admin.js ---');
 const authMiddleware = require('../middleware/authMiddleware');
 const Payment = require('../models/Payment');
 const User = require('../models/User');
+const Order = require('../models/Order');
+
+// Get Admin Dashboard Stats
+router.get('/stats', authMiddleware, async (req, res) => {
+    try {
+        const totalUsers = await User.countDocuments({});
+        const pendingRequests = await Payment.countDocuments({ status: 'pending' });
+
+        // Calculate Revenue (Selling Price - API Cost) for completed orders
+        // Note: For older orders without apiCost, we use the fallback estimation logic
+        const orders = await Order.find({ status: 'completed' });
+        
+        let totalRevenue = 0;
+        orders.forEach(order => {
+            const cost = order.apiCost || (order.charge / 1.30);
+            totalRevenue += (order.charge - cost);
+        });
+
+        res.json({
+            totalUsers,
+            pendingRequests,
+            totalRevenue: parseFloat(totalRevenue.toFixed(2))
+        });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
 
 // Get Pending Payments
 router.get('/payments/pending', authMiddleware, async (req, res) => {

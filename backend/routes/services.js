@@ -52,17 +52,21 @@ router.get('/forcesync', async (req, res) => {
             console.warn(`Failed to fetch live exchange rate, using fallback (₹${exchangeRate}):`, err.message);
         }
 
-        const finalServices = providerServices.map(pService => ({
-            providerServiceId: pService.service,
-            name: pService.name,
-            category: pService.category,
-            rate: parseFloat(pService.rate) * exchangeRate * 1.30, // Convert to INR and add 30% margin
-            min: parseInt(pService.min),
-            max: parseInt(pService.max),
-            type: pService.type,
-            averageTime: timeMap[pService.service] || '30 mins - 1 hour', // Preserve custom time or set default
-            active: true
-        }));
+        const finalServices = providerServices.map(pService => {
+            const providerRate = parseFloat(pService.rate) * exchangeRate;
+            return {
+                providerServiceId: pService.service,
+                name: pService.name,
+                category: pService.category,
+                rate: providerRate * 1.30, // Convert to INR and add 30% margin
+                originalRate: providerRate, // Store base cost in INR
+                min: parseInt(pService.min),
+                max: parseInt(pService.max),
+                type: pService.type,
+                averageTime: timeMap[pService.service] || '30 mins - 1 hour', // Preserve custom time or set default
+                active: true
+            };
+        });
 
         await Service.insertMany(finalServices);
         console.log(`Successfully inserted ${finalServices.length} new services.`);

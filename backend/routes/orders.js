@@ -29,6 +29,7 @@ router.post('/create', auth, async (req, res) => {
 
         // B. Calculate Cost
         const charge = (service.rate * quantity) / 1000;
+        const apiCost = (service.originalRate * quantity) / 1000;
 
         // C. Check User Balance
         const user = await User.findById(req.user.id);
@@ -71,6 +72,7 @@ router.post('/create', auth, async (req, res) => {
                 link,
                 quantity,
                 charge,
+                apiCost,
                 status: 'pending'
             });
 
