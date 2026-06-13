@@ -39,7 +39,7 @@ export default function AddFunds() {
     const fetchHistory = async () => {
         try {
             // Demo user ID header
-            const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+            const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
             const token = localStorage.getItem("token");
             const res = await fetch(`${API_URL}/api/payments/history`, {
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -63,7 +63,7 @@ export default function AddFunds() {
 
             setLoading(true);
             try {
-                const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+                const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
                 const token = localStorage.getItem("token");
                 const res = await fetch(`${API_URL}/api/payments/create`, {
                     method: "POST",
@@ -126,7 +126,8 @@ export default function AddFunds() {
                                     />
                                 </div>
                                 <p className="text-xs text-slate-500 mt-3 text-center">
-                                    Scan with any UPI App (GPay, PhonePe, Paytm)<br />
+                                    Scan with any UPI App (GPay, PhonePe, Paytm) <br />
+                                    UPI ID: <strong>s3378242552777024@slc</strong><br />
                                     After payment, enter the UTR / Transaction ID below.
                                 </p>
                             </div>
