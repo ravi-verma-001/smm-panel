@@ -5,7 +5,8 @@ import {
     Users,
     Activity,
     DollarSign,
-    RefreshCw
+    RefreshCw,
+    Database
 } from "lucide-react";
 import styles from "../admin.module.css";
 
@@ -19,6 +20,37 @@ export default function AdminDashboard() {
     const [stats, setStats] = useState<DashboardStats | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [syncing, setSyncing] = useState(false);
+
+    const handleSyncServices = async () => {
+        if (!window.confirm("Are you sure you want to delete existing services and re-sync from the new SMM provider?")) {
+            return;
+        }
+        try {
+            setSyncing(true);
+            const token = localStorage.getItem("adminToken");
+            const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
+            
+            const res = await fetch(`${API_URL}/api/admin/sync-services`, {
+                method: "POST",
+                headers: { 
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            const data = await res.json();
+            if (res.ok) {
+                alert(data.message || "Services synced successfully!");
+            } else {
+                alert(data.message || "Failed to sync services");
+            }
+        } catch (err) {
+            alert("Connection error during sync");
+        } finally {
+            setSyncing(false);
+        }
+    };
 
     const fetchStats = async () => {
         try {
@@ -63,14 +95,24 @@ export default function AdminDashboard() {
                     <h1 className="text-2xl font-bold text-slate-900">Dashboard</h1>
                     <p className="text-slate-500 text-sm">Overview of platform performance.</p>
                 </div>
-                <button 
-                    onClick={fetchStats}
-                    className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition"
-                    disabled={loading}
-                >
-                    <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
-                    Refresh
-                </button>
+                <div className="flex gap-3">
+                    <button 
+                        onClick={handleSyncServices}
+                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition shadow-sm"
+                        disabled={syncing}
+                    >
+                        <Database size={16} className={syncing ? "animate-spin" : ""} />
+                        {syncing ? "Syncing..." : "Sync Services"}
+                    </button>
+                    <button 
+                        onClick={fetchStats}
+                        className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition"
+                        disabled={loading}
+                    >
+                        <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
+                        Refresh
+                    </button>
+                </div>
             </div>
 
             {/* Stats Grid - Clean */}

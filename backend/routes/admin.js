@@ -129,4 +129,69 @@ router.put('/services/:id/time', authMiddleware, async (req, res) => {
     }
 });
 
+// Sync Services from SMM Provider
+router.post('/sync-services', authMiddleware, async (req, res) => {
+    try {
+        const Service = require('../models/Service');
+        const providerApi = require('../utils/japApi');
+
+        console.log('[Admin Sync] Fetching existing services to preserve custom average times...');
+        const existingServices = await Service.find({});
+        const timeMap = {};
+        existingServices.forEach(s => {
+            if (s.averageTime) timeMap[s.providerServiceId] = s.averageTime;
+        });
+
+        console.log('[Admin Sync] Clearing existing services...');
+        await Service.deleteMany({});
+
+        console.log('[Admin Sync] Fetching services from provider...');
+        const providerServices = await providerApi.getServices();
+
+        if (!Array.isArray(providerServices)) {
+            return res.status(502).json({ message: 'Error: Provider response is not an array.', details: providerServices });
+        }
+
+        console.log(`[Admin Sync] Fetched ${providerServices.length} services.`);
+
+        // Fetch live USD to INR exchange rate dynamically
+        let exchangeRate = 85;
+        try {
+            const axios = require('axios');
+            console.log('[Admin Sync] Fetching live USD to INR exchange rate...');
+            const rateResponse = await axios.get('https://api.exchangerate-api.com/v4/latest/USD');
+            if (rateResponse.data && rateResponse.data.rates && rateResponse.data.rates.INR) {
+                exchangeRate = parseFloat(rateResponse.data.rates.INR);
+                console.log(`[Admin Sync] Live Exchange Rate Applied: 1 USD = ₹${exchangeRate}`);
+            }
+        } catch (err) {
+            console.warn(`[Admin Sync] Failed to fetch live exchange rate, using fallback (₹${exchangeRate}):`, err.message);
+        }
+
+        const finalServices = providerServices.map(pService => {
+            const originalRateInINR = parseFloat(pService.rate) * exchangeRate;
+            return {
+                providerServiceId: pService.service,
+                name: pService.name,
+                category: pService.category,
+                rate: originalRateInINR * 1.30, // Convert to INR and add 30% margin
+                originalRate: originalRateInINR, // Provider cost price in INR
+                min: parseInt(pService.min),
+                max: parseInt(pService.max),
+                type: pService.type,
+                averageTime: timeMap[pService.service] || '30 mins - 1 hour',
+                active: true
+            };
+        });
+
+        await Service.insertMany(finalServices);
+        console.log(`[Admin Sync] Successfully inserted ${finalServices.length} new services.`);
+
+        res.json({ message: `Successfully synced ${finalServices.length} services from provider.`, count: finalServices.length });
+    } catch (err) {
+        console.error('[Admin Sync] Sync Failed:', err.message);
+        res.status(500).json({ message: 'Sync failed', error: err.message });
+    }
+});
+
 module.exports = router;
