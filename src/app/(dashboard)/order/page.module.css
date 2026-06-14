@@ -84,7 +84,7 @@
     align-items: center;
     justify-content: center;
     padding: 1.25rem 0.5rem;
-    background: linear-gradient(180deg, #059669 0%, #065F46 100%);
+    background: linear-gradient(180deg, #2563EB 0%, #1E3A8A 100%);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: var(--radius-lg);
     cursor: pointer;
@@ -102,7 +102,7 @@
 
 .activeCategory {
     border: 2px solid #FFFFFF;
-    box-shadow: 0 0 15px rgba(5, 150, 105, 0.4);
+    box-shadow: 0 0 15px rgba(37, 99, 235, 0.4);
     transform: translateY(-2px);
 }
 
