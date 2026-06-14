@@ -55,6 +55,31 @@ export default function Register() {
 
     return (
         <div className={styles.container}>
+            {/* JSON-LD Structured Data Schema Markup */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "BreadcrumbList",
+                        "itemListElement": [
+                            {
+                                "@type": "ListItem",
+                                "position": 1,
+                                "name": "Home",
+                                "item": "https://dovixsmm.com/"
+                            },
+                            {
+                                "@type": "ListItem",
+                                "position": 2,
+                                "name": "Register",
+                                "item": "https://dovixsmm.com/register"
+                            }
+                        ]
+                    })
+                }}
+            />
+
             <SuccessModal
                 isOpen={showSuccess}
                 title="Account Created!"
@@ -65,8 +90,8 @@ export default function Register() {
 
             <div className={styles.card}>
                 <div className={styles.header}>
-                    <h1 className={styles.title}>Create Account</h1>
-                    <p className={styles.subtitle}>Get started with the best SMM panel</p>
+                    <h1 className={styles.title} style={{ fontSize: '1.75rem', fontWeight: '800' }}>DovixSMM Register</h1>
+                    <p className={styles.subtitle}>Get started with the best SMM reseller panel</p>
                 </div>
 
                 {error && (
@@ -129,12 +154,25 @@ export default function Register() {
                     </button>
                 </form>
 
-                <p className={styles.footer}>
+                <p className={styles.footer} style={{ marginBottom: '1.5rem' }}>
                     Already have an account?
-                    <Link href="/login" className={styles.link}>
+                    <Link href="/login" className={styles.link} style={{ marginLeft: '4px' }}>
                         Sign In
                     </Link>
                 </p>
+
+                {/* Public footer links to brand & SEO pages */}
+                <div className="border-t border-slate-100 pt-4 flex flex-wrap justify-center gap-x-4 gap-y-2 text-xs text-slate-500 font-medium">
+                    <Link href="/about" className="hover:text-blue-600 transition">About Us</Link>
+                    <span>•</span>
+                    <Link href="/contact" className="hover:text-blue-600 transition">Contact Us</Link>
+                    <span>•</span>
+                    <Link href="/privacy" className="hover:text-blue-600 transition">Privacy Policy</Link>
+                    <span>•</span>
+                    <Link href="/terms" className="hover:text-blue-600 transition">Terms & Conditions</Link>
+                    <span>•</span>
+                    <Link href="/refunds" className="hover:text-blue-600 transition">Refund Policy</Link>
+                </div>
             </div>
         </div>
     );

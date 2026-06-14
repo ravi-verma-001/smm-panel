@@ -15,8 +15,24 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DovixSMM",
-  description: "Premium Social Media Marketing Panel",
+  title: "DovixSMM | Cheapest & Best SMM Panel Provider",
+  description: "DovixSMM is the best SMM reseller panel offering cheap Instagram followers, YouTube views, Facebook likes, TikTok services, and automated API support.",
+  keywords: ["DovixSMM", "Dovix SMM", "DovixSMM Panel", "Dovix SMM Panel", "Cheapest SMM Panel", "Best SMM Panel", "SMM Reseller Panel", "Instagram Followers Panel"],
+  metadataBase: new URL("https://dovixsmm.com"),
+  alternates: {
+    canonical: "/",
+  },
+  verification: {
+    google: "google42372001e5f64765",
+  },
+  openGraph: {
+    title: "DovixSMM | Cheapest & Best SMM Panel Provider",
+    description: "Get cheapest and fastest SMM services for Instagram, YouTube, TikTok, Facebook, and Telegram. Reseller API enabled.",
+    url: "https://dovixsmm.com",
+    siteName: "DovixSMM",
+    locale: "en_US",
+    type: "website",
+  }
 };
 
 export default function RootLayout({

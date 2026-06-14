@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /$
+Allow: /login
+Allow: /register
+Allow: /about
+Allow: /contact
+Allow: /privacy
+Allow: /terms
+Allow: /refunds
+Disallow: /admin
+Disallow: /admin/*
+Disallow: /dashboard
+Disallow: /order
+Disallow: /orders
+Disallow: /funds
+Disallow: /services
+Disallow: /settings
+Disallow: /tickets
+
+Sitemap: https://dovixsmm.com/sitemap.xml

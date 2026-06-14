@@ -42,10 +42,44 @@ export default function Login() {
 
     return (
         <div className={styles.container}>
+            {/* JSON-LD Structured Data Schema Markup */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify([
+                        {
+                            "@context": "https://schema.org",
+                            "@type": "Organization",
+                            "name": "DovixSMM",
+                            "url": "https://dovixsmm.com",
+                            "logo": "https://dovixsmm.com/Dovix_logo.png",
+                            "description": "Premium SMM Panel providing the cheapest and fastest social media services for Instagram, YouTube, TikTok, and Facebook.",
+                            "sameAs": [
+                                "https://facebook.com/dovixsmm",
+                                "https://instagram.com/dovixsmm",
+                                "https://youtube.com/dovixsmm",
+                                "https://twitter.com/dovixsmm"
+                            ]
+                        },
+                        {
+                            "@context": "https://schema.org",
+                            "@type": "WebSite",
+                            "name": "DovixSMM",
+                            "url": "https://dovixsmm.com",
+                            "potentialAction": {
+                                "@type": "SearchAction",
+                                "target": "https://dovixsmm.com/services?search={search_term_string}",
+                                "query-input": "required name=search_term_string"
+                            }
+                        }
+                    ])
+                }}
+            />
+
             <div className={styles.card}>
                 <div className={styles.header}>
-                    <h1 className={styles.title}>Welcome Back</h1>
-                    <p className={styles.subtitle}>Sign in to manage your SMM orders</p>
+                    <h1 className={styles.title} style={{ fontSize: '1.75rem', fontWeight: '800' }}>DovixSMM - Cheapest SMM Panel</h1>
+                    <p className={styles.subtitle}>Best Social Media Marketing Panel Provider. Sign in to place orders.</p>
                 </div>
 
                 {error && (
@@ -93,12 +127,25 @@ export default function Login() {
                     </button>
                 </form>
 
-                <p className={styles.footer}>
+                <p className={styles.footer} style={{ marginBottom: '1.5rem' }}>
                     Don&apos;t have an account?
-                    <Link href="/register" className={styles.link}>
+                    <Link href="/register" className={styles.link} style={{ marginLeft: '4px' }}>
                         Sign Up
                     </Link>
                 </p>
+
+                {/* Public footer links to brand & SEO pages */}
+                <div className="border-t border-slate-100 pt-4 flex flex-wrap justify-center gap-x-4 gap-y-2 text-xs text-slate-500 font-medium">
+                    <Link href="/about" className="hover:text-blue-600 transition">About Us</Link>
+                    <span>•</span>
+                    <Link href="/contact" className="hover:text-blue-600 transition">Contact Us</Link>
+                    <span>•</span>
+                    <Link href="/privacy" className="hover:text-blue-600 transition">Privacy Policy</Link>
+                    <span>•</span>
+                    <Link href="/terms" className="hover:text-blue-600 transition">Terms & Conditions</Link>
+                    <span>•</span>
+                    <Link href="/refunds" className="hover:text-blue-600 transition">Refund Policy</Link>
+                </div>
             </div>
         </div>
     );
