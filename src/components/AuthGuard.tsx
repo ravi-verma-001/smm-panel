@@ -10,11 +10,9 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
 
     useEffect(() => {
+        const publicPaths = ["/login", "/register", "/", "/about", "/contact", "/privacy", "/terms", "/refunds"];
         if (!loading && !token) {
-            // Redirect to login if not authenticated
-            // Avoid redirecting if already on public pages (like register) -> handled by layout placement usually
-            // But strict guard is better.
-            if (pathname !== "/login" && pathname !== "/register") {
+            if (!publicPaths.includes(pathname)) {
                 router.push("/login");
             }
         }
@@ -28,8 +26,8 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
         );
     }
 
-    // If no token, we return null (effect will redirect)
-    if (!token && pathname !== "/login" && pathname !== "/register") {
+    const publicPaths = ["/login", "/register", "/", "/about", "/contact", "/privacy", "/terms", "/refunds"];
+    if (!token && !publicPaths.includes(pathname)) {
         return null;
     }
 
