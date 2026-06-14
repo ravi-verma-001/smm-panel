@@ -37,12 +37,14 @@ const syncServices = async () => {
             // 1 USD = 90.65 INR (User defined rate)
             const EXCHANGE_RATE = 90.65;
 
+            const originalRateInINR = parseFloat(pService.rate) * EXCHANGE_RATE;
             const serviceData = {
                 providerServiceId: pService.service,
                 name: pService.name,
                 category: pService.category,
                 // Convert USD to INR and add 25% profit
-                rate: (parseFloat(pService.rate) * EXCHANGE_RATE) * 1.25,
+                rate: originalRateInINR * 1.25,
+                originalRate: originalRateInINR,
                 min: parseInt(pService.min),
                 max: parseInt(pService.max),
                 type: pService.type,
