@@ -13,7 +13,6 @@ Disallow: /dashboard
 Disallow: /order
 Disallow: /orders
 Disallow: /funds
-Disallow: /services
 Disallow: /settings
 Disallow: /tickets
 
