@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 :root {
-  /* Professional Light Green Palette */
-  --bg-primary: #FFFFFF;
-  --bg-secondary: #F0FDF4;
-  /* Mint 50 - Very subtle green tint */
-  --bg-card: #FFFFFF;
+  /* Professional Light Blue Palette */
+  --bg-primary: #FFFFFF; /* Pure White */
+  --bg-secondary: #EFF6FF;
+  /* Blue 50 - Very subtle blue tint */
+  --bg-card: #FFFFFF; /* Pure White */
 
   --text-primary: #0F172A;
   /* Slate 900 */
@@ -16,20 +16,20 @@
   --text-muted: #94A3B8;
   /* Slate 400 */
 
-  --accent-primary: #059669;
-  /* Emerald 600 */
-  --accent-hover: #047857;
-  /* Emerald 700 */
-  --accent-light: #D1FAE5;
-  /* Emerald 100 */
-  --accent-glow: rgba(16, 185, 129, 0.25);
+  --accent-primary: #2563EB;
+  /* Blue 600 */
+  --accent-hover: #1D4ED8;
+  /* Blue 700 */
+  --accent-light: #DBEAFE;
+  /* Blue 100 */
+  --accent-glow: rgba(37, 99, 235, 0.25);
 
   --border-color: #E2E8F0;
   /* Slate 200 */
   --border-subtle: #F1F5F9;
   /* Slate 100 */
 
-  --success: #10B981;
+  --success: #3B82F6;
   --error: #EF4444;
   --warning: #F59E0B;
 
@@ -41,7 +41,7 @@
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05);
-  --shadow-accent: 0 4px 14px 0 rgba(16, 185, 129, 0.3);
+  --shadow-accent: 0 4px 14px 0 rgba(37, 99, 235, 0.3);
 
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);

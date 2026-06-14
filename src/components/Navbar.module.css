@@ -33,7 +33,7 @@
     align-items: center;
     gap: 0.5rem;
     padding: 0.5rem 1rem;
-    background: linear-gradient(180deg, #059669 0%, #065F46 100%);
+    background: linear-gradient(180deg, #2563EB 0%, #1E3A8A 100%);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: var(--radius-full);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -61,7 +61,7 @@
     justify-content: center;
     width: 40px;
     height: 40px;
-    background: linear-gradient(180deg, #059669 0%, #065F46 100%);
+    background: linear-gradient(180deg, #2563EB 0%, #1E3A8A 100%);
     border-radius: 50%;
     color: #FFFFFF;
     transition: all 0.2s;
@@ -74,6 +74,27 @@
 .iconBtn:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.logoutBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(239, 68, 68, 0.1);
+    border-radius: 50%;
+    color: #ef4444;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.logoutBtn:hover {
+    background: rgba(239, 68, 68, 0.2);
+    color: #dc2626;
+    transform: translateY(-2px);
 }
 
 .badge {
@@ -99,7 +120,7 @@
     gap: 0.75rem;
     cursor: pointer;
     padding: 0.25rem 0.75rem 0.25rem 0.25rem;
-    background: linear-gradient(180deg, #059669 0%, #065F46 100%);
+    background: linear-gradient(180deg, #2563EB 0%, #1E3A8A 100%);
     border-radius: var(--radius-full);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -122,6 +143,16 @@
     font-size: 0.875rem;
 }
 
+.brand {
+    display: none;
+}
+
+.logo {
+    height: 350px;
+    width: 350px;
+    object-fit: contain;
+}
+
 @media (max-width: 768px) {
     .navbar {
         width: 100%;
@@ -131,6 +162,14 @@
     .menuToggle {
         display: block;
         margin-right: 1rem;
+    }
+
+    .brand {
+        display: none;
+    }
+
+    .logoutBtn {
+        display: none;
     }
 
     .balanceCard {

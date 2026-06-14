@@ -1,19 +1,21 @@
 "use client";
 
-import { Bell, User, Menu } from "lucide-react";
+import { Bell, User, Menu, LogOut } from "lucide-react";
 import { useState, useEffect } from "react";
 import styles from "./Navbar.module.css";
 import { useSidebar } from "@/context/SidebarContext";
+import { useAuth } from "../context/AuthContext";
 
 export default function Navbar() {
     const [balance, setBalance] = useState("0.00");
     const { toggleSidebar } = useSidebar();
+    const { logout } = useAuth();
 
     useEffect(() => {
         const fetchBalance = async () => {
             try {
                 const token = localStorage.getItem("token");
-                const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+                const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
                 const res = await fetch(`${API_URL}/api/user/me`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
@@ -42,6 +44,10 @@ export default function Navbar() {
             </div>
 
             <div className={styles.content}>
+                <div className={styles.brand}>
+                    <img src="/Dovix_logo.png" alt="Dovix SMM" className={styles.logo} />
+                </div>
+
                 <div className={styles.balanceCard}>
                     <span className={styles.balanceLabel}>Balance:</span>
                     <span className={styles.balanceAmount}>₹{balance}</span>
@@ -57,8 +63,12 @@ export default function Navbar() {
                         <div className={styles.avatar}>
                             <User size={20} />
                         </div>
-                        <span className={styles.username}>AdminUser</span>
+                        <span className={styles.username}>User</span>
                     </div>
+
+                    <button className={styles.logoutBtn} onClick={logout} title="Logout">
+                        <LogOut size={20} />
+                    </button>
                 </div>
             </div>
         </header>

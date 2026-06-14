@@ -19,19 +19,19 @@
 /*                                Sidebar Styling                             */
 /* -------------------------------------------------------------------------- */
 .sidebar {
-    background: var(--admin-sidebar-bg);
-    border-right: 1px solid var(--admin-sidebar-border);
-    box-shadow: none;
+    background: linear-gradient(180deg, #2563EB 0%, #1E3A8A 100%);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.1);
 }
 
 .logoSection {
     background: transparent;
-    border-bottom: 1px solid var(--admin-sidebar-border);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     padding: 1.5rem;
 }
 
 .logoBox {
-    background: #0f172a;
+    background: rgba(255, 255, 255, 0.2);
     color: white;
     border-radius: 0.5rem;
 }
@@ -39,25 +39,26 @@
 .navItem {
     margin: 4px 12px;
     border-radius: 0.5rem;
-    transition: all 0.2s ease;
-    color: var(--text-secondary);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    color: rgba(255, 255, 255, 0.7);
     font-weight: 500;
 }
 
 .navItem:hover {
-    background: #f1f5f9;
-    /* Slate 100 */
-    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    transform: translateX(4px);
 }
 
 .navItemActive {
-    background: #0f172a !important;
-    /* Slate 900 */
-    color: white !important;
+    background-color: #FFFFFF !important; /* White */
+    color: #2563EB !important;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .navItemActive svg {
-    color: white;
+    color: #2563EB;
 }
 
 /* -------------------------------------------------------------------------- */

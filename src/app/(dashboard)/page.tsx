@@ -65,7 +65,7 @@ export default function Dashboard() {
         const fetchBalance = async () => {
             try {
                 const token = localStorage.getItem("token");
-                const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+                const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
                 const res = await fetch(`${API_URL}/api/user/me`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
@@ -94,8 +94,7 @@ export default function Dashboard() {
     return (
         <div className={styles.container}>
             <div className={styles.welcomeSection}>
-                <h1 className={styles.welcomeTitle}>Welcome back, {user?.username || "Admin"}!</h1>
-                <p className={styles.apiLink}>API Key: ******************** <button style={{ color: 'var(--accent-primary)', marginLeft: '8px' }}>Copy</button></p>
+                <h1 className={styles.welcomeTitle}>Welcome back, {user?.username || "User"}!</h1>
             </div>
 
             <div className={styles.statsGrid}>

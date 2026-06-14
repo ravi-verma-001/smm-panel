@@ -228,7 +228,7 @@ export default function AddFunds() {
                                         <td className="p-4 font-mono text-xs">{tx.utr}</td>
                                         <td className="p-4 font-bold text-slate-900">₹{tx.amount}</td>
                                         <td className="p-4">
-                                            <span className={`px-2 py-1 rounded text-xs font-medium capitalize ${tx.status === 'approved' ? 'bg-green-100 text-green-700' :
+                                            <span className={`px-2 py-1 rounded text-xs font-medium capitalize ${tx.status === 'approved' ? 'bg-blue-100 text-blue-700' :
                                                 tx.status === 'rejected' ? 'bg-red-100 text-red-700' :
                                                     'bg-yellow-100 text-yellow-700'
                                                 }`}>

@@ -30,7 +30,7 @@ export default function PendingPayments() {
     const fetchPayments = async () => {
         try {
             const token = localStorage.getItem("adminToken");
-            const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+            const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
             const res = await fetch(`${API_URL}/api/admin/payments/pending`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
@@ -49,7 +49,7 @@ export default function PendingPayments() {
         setProcessingId(id);
         try {
             const token = localStorage.getItem("adminToken");
-            const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+            const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
             const res = await fetch(`${API_URL}/api/admin/payments/${action}/${id}`, {
                 method: "POST",
                 headers: { Authorization: `Bearer ${token}` },
@@ -81,7 +81,7 @@ export default function PendingPayments() {
                         <Filter size={16} />
                         <span>Filter</span>
                     </button>
-                    <button className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-all shadow-sm shadow-emerald-200">
+                    <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all shadow-sm shadow-blue-200">
                         <FileText size={16} />
                         <span>Export CSV</span>
                     </button>
@@ -101,7 +101,7 @@ export default function PendingPayments() {
             {/* Payments Table */}
             {loading ? (
                 <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-slate-200/60 shadow-sm">
-                    <Loader2 className="animate-spin text-emerald-600 mb-4" size={40} />
+                    <Loader2 className="animate-spin text-blue-600 mb-4" size={40} />
                     <p className="text-slate-500 font-medium">Loading payments...</p>
                 </div>
             ) : payments.length === 0 ? (
@@ -139,7 +139,7 @@ export default function PendingPayments() {
                                             </div>
                                         </td>
                                         <td className="p-5">
-                                            <div className="font-bold text-emerald-600 text-lg">
+                                            <div className="font-bold text-blue-600 text-lg">
                                                 ${payment.amount.toFixed(2)}
                                             </div>
                                             <span className="text-xs text-slate-400 font-medium">USD</span>
@@ -174,7 +174,7 @@ export default function PendingPayments() {
                                                 <button
                                                     onClick={() => handleAction(payment._id, "approve")}
                                                     disabled={processingId === payment._id}
-                                                    className="flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition-all shadow-sm shadow-emerald-200 disabled:opacity-70 disabled:cursor-not-allowed"
+                                                    className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-all shadow-sm shadow-blue-200 disabled:opacity-70 disabled:cursor-not-allowed"
                                                 >
                                                     {processingId === payment._id ? (
                                                         <Loader2 size={16} className="animate-spin" />

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { AlertCircle, X } from "lucide-react";
+import { AlertCircle, X, Instagram, Facebook, Youtube, Send, Music2, Twitter, Globe, Linkedin, MessageCircle, PlayCircle } from "lucide-react";
 import Link from "next/link";
 import styles from "./page.module.css";
 
@@ -17,9 +17,11 @@ interface Service {
     averageTime?: string;
 }
 
+const PLATFORMS = ["Instagram", "Facebook", "Telegram", "YouTube"];
+
 export default function NewOrder() {
     const [services, setServices] = useState<Service[]>([]);
-    const [category, setCategory] = useState("");
+    const [category, setCategory] = useState(PLATFORMS[0]);
     const [selectedServiceId, setSelectedServiceId] = useState<string>("");
     const [link, setLink] = useState("");
     const [quantity, setQuantity] = useState<number | "">("");
@@ -28,12 +30,30 @@ export default function NewOrder() {
     const [showLowBalanceModal, setShowLowBalanceModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
+    const [successTimer, setSuccessTimer] = useState<NodeJS.Timeout | null>(null);
+
+    // Auto-close success modal after 3 seconds
+    useEffect(() => {
+        if (showSuccessModal) {
+            const timer = setTimeout(() => {
+                setShowSuccessModal(false);
+            }, 3000);
+            setSuccessTimer(timer);
+            return () => clearTimeout(timer);
+        }
+    }, [showSuccessModal]);
+
+    const closeSuccessModal = () => {
+        if (successTimer) clearTimeout(successTimer);
+        setShowSuccessModal(false);
+    };
 
     // Fetch Services on Load
     useEffect(() => {
         const fetchServicesAndBalance = async () => {
             try {
-                const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+                const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
                 const token = localStorage.getItem("token");
 
                 // Fetch Balance
@@ -54,8 +74,7 @@ export default function NewOrder() {
                     setServices(data);
                     // Set default category
                     if (data.length > 0) {
-                        const firstCategory = data[0].category;
-                        setCategory(firstCategory);
+                        setCategory("Instagram");
                     }
                 }
             } catch (error) {
@@ -65,10 +84,10 @@ export default function NewOrder() {
         fetchServicesAndBalance();
     }, []);
 
-    const categories = [...new Set(services.map(s => s.category))];
-
     const filteredServices = useMemo(() => {
-        return services.filter(s => s.category === category);
+        return services.filter(s => 
+            s.category.toLowerCase().includes(category.toLowerCase())
+        );
     }, [services, category]);
 
     // Auto-select first service when category changes
@@ -90,6 +109,20 @@ export default function NewOrder() {
             setCharge(0);
         }
     }, [selectedService, quantity]);
+
+    const getCategoryIcon = (category: string) => {
+        const cat = category.toLowerCase();
+        if (cat.includes('instagram')) return <Instagram size={20} />;
+        if (cat.includes('facebook') || cat.includes('fb')) return <Facebook size={20} />;
+        if (cat.includes('youtube')) return <Youtube size={20} />;
+        if (cat.includes('telegram')) return <Send size={20} />;
+        if (cat.includes('tiktok')) return <Music2 size={20} />;
+        if (cat.includes('twitter') || cat.includes('x')) return <Twitter size={20} />;
+        if (cat.includes('linkedin')) return <Linkedin size={20} />;
+        if (cat.includes('threads')) return <MessageCircle size={20} />;
+        if (cat.includes('spotify') || cat.includes('music')) return <PlayCircle size={20} />;
+        return <Globe size={20} />;
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -124,7 +157,7 @@ export default function NewOrder() {
             const data = await res.json();
 
             if (res.ok) {
-                setMessage({ type: 'success', text: `Order Placed Successfully! ID: ${data.orderId}` });
+                setShowSuccessModal(true); // Show popup instead of inline message
                 setLink("");
                 setQuantity("");
             } else {
@@ -173,7 +206,7 @@ export default function NewOrder() {
                                 </button>
                                 <Link
                                     href="/add-funds"
-                                    className="px-5 py-2.5 rounded-lg text-sm font-medium text-white bg-green-600 hover:bg-green-700 transition"
+                                    className="px-5 py-2.5 rounded-lg text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition"
                                 >
                                     Add Funds Now
                                 </Link>
@@ -183,9 +216,49 @@ export default function NewOrder() {
                 </div>
             )}
 
-            {message && (
-                <div className={`p-4 mb-4 rounded-lg text-sm font-medium ${message.type === 'success' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+            {message && message.type === 'error' && (
+                <div className={`p-4 mb-4 rounded-lg text-sm font-medium bg-red-50 text-red-700`}>
                     {message.text}
+                </div>
+            )}
+
+            {/* Success Auto-Close Modal */}
+            {showSuccessModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4 animate-in fade-in duration-200">
+                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden transform transition-all scale-100 animate-in zoom-in-95 duration-200 relative">
+                        <button
+                            onClick={closeSuccessModal}
+                            className="absolute right-4 top-4 text-gray-400 hover:text-gray-600 transition"
+                        >
+                            <X size={20} />
+                        </button>
+                        <div className="p-8 flex flex-col items-center justify-center text-center">
+                            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6">
+                                <svg
+                                    className="w-8 h-8 text-blue-600"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="M5 13l4 4L19 7"
+                                    ></path>
+                                </svg>
+                            </div>
+                            <h2 className="text-2xl font-bold text-gray-900 mb-2">Success!</h2>
+                            <p className="text-gray-600 mb-6">Order Placed Successfully</p>
+                            <button
+                                onClick={closeSuccessModal}
+                                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-colors"
+                            >
+                                Continue
+                            </button>
+                        </div>
+                    </div>
                 </div>
             )}
 
@@ -193,17 +266,22 @@ export default function NewOrder() {
                 <div className={styles.formCard}>
                     <form onSubmit={handleSubmit} className={styles.form}>
                         <div className={styles.field}>
-                            <label className={styles.label}>Category</label>
-                            <div className={styles.selectWrapper}>
-                                <select
-                                    value={category}
-                                    onChange={(e) => setCategory(e.target.value)}
-                                    className={styles.select}
-                                >
-                                    {categories.map(cat => (
-                                        <option key={cat} value={cat}>{cat}</option>
-                                    ))}
-                                </select>
+                            <label className={styles.label}>Select Platform</label>
+                            <div className={styles.categoryGrid}>
+                                {PLATFORMS.map(plt => (
+                                    <button
+                                        key={plt}
+                                        type="button"
+                                        className={`${styles.categoryItem} ${category === plt ? styles.activeCategory : ""}`}
+                                        onClick={() => setCategory(plt)}
+                                        title={plt}
+                                    >
+                                        <span className={styles.categoryIcon}>
+                                            {getCategoryIcon(plt)}
+                                        </span>
+                                        <span className={styles.categoryName}>{plt}</span>
+                                    </button>
+                                ))}
                             </div>
                         </div>
 
@@ -217,7 +295,7 @@ export default function NewOrder() {
                                 >
                                     {filteredServices.map(service => (
                                         <option key={service._id} value={service.providerServiceId}>
-                                            {service.providerServiceId} - {service.name} - ₹{service.rate.toFixed(2)}
+                                            {service.providerServiceId} - {service.name} (Avg: {service.averageTime || '--'}) - ₹{service.rate.toFixed(2)}
                                         </option>
                                     ))}
                                 </select>

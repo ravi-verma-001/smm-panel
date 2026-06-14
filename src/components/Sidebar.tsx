@@ -37,10 +37,10 @@ export default function Sidebar() {
             <aside className={`${styles.sidebar} ${isSidebarOpen ? styles.open : ""}`}>
                 <div className={styles.logo}>
                     <img
-                        src="/logo.svg"
-                        alt="DovixSMM"
+                        src="/Dovix_logo.png"
+                        alt="Dovix SMM"
                         className={styles.logoImage}
-                        height={40}
+                        height={80}
                     />
                     <button className={styles.closeBtn} onClick={closeSidebar}>
                         <X size={24} />

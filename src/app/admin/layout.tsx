@@ -47,14 +47,14 @@ function AdminSidebar({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (val:
                         <Shield size={18} />
                     </div>
                     <div>
-                        <span className="font-bold text-lg tracking-tight text-slate-900 block leading-tight">DovixSMM</span>
-                        <span className="text-[10px] text-slate-500 font-medium tracking-wider uppercase">Admin</span>
+                        <span className="font-bold text-lg tracking-tight text-white block leading-tight">DovixSMM</span>
+                        <span className="text-[10px] text-blue-100 font-medium tracking-wider uppercase">Admin</span>
                     </div>
                 </div>
 
                 {/* Navigation */}
                 <nav className="flex-1 p-3 space-y-0.5 overflow-y-auto">
-                    <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 px-3 mt-4">
+                    <div className="text-xs font-semibold text-blue-100/70 uppercase tracking-wider mb-2 px-3 mt-4">
                         Main Menu
                     </div>
                     {menuItems.map((item) => {
@@ -75,7 +75,7 @@ function AdminSidebar({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (val:
                 </nav>
 
                 {/* User Profile & Logout */}
-                <div className="p-3 border-t border-slate-200 bg-slate-50/50">
+                <div className="p-3 border-t border-white/10 bg-black/10">
                     <button
                         onClick={() => {
                             if (window.confirm("Are you sure you want to logout?")) {
@@ -83,19 +83,19 @@ function AdminSidebar({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (val:
                                 window.location.href = '/admin/login';
                             }
                         }}
-                        className="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:bg-slate-100 hover:text-red-600 rounded-lg w-full transition-colors group mb-2"
+                        className="flex items-center gap-3 px-3 py-2.5 text-blue-50 hover:bg-white/10 hover:text-red-400 rounded-lg w-full transition-colors group mb-2"
                     >
                         <LogOut size={18} />
                         <span className="text-sm font-medium">Logout</span>
                     </button>
 
                     <div className="flex items-center gap-3 px-3 py-2">
-                        <div className="h-8 w-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-500">
+                        <div className="h-8 w-8 rounded-full bg-white/20 flex items-center justify-center text-white">
                             <User size={14} />
                         </div>
                         <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-slate-900 truncate">Administrator</p>
-                            <p className="text-xs text-slate-500 truncate">admin@dovixsmm.com</p>
+                            <p className="text-sm font-medium text-white truncate">Administrator</p>
+                            <p className="text-xs text-blue-100/70 truncate">admin@dovixsmm.com</p>
                         </div>
                     </div>
                 </div>

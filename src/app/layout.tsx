@@ -25,9 +25,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <NextTopLoader color="#059669" showSpinner={false} />
+        <NextTopLoader color="#2563EB" showSpinner={false} />
         <Providers>
           {children}
         </Providers>

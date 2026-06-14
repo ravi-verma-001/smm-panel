@@ -27,8 +27,11 @@ export default function Services() {
 
     const fetchServices = async () => {
         try {
-            const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+            const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
             const res = await fetch(`${API_URL}/api/services`);
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
             const data = await res.json();
             setServices(data);
         } catch (error) {
