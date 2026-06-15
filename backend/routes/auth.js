@@ -248,7 +248,7 @@ router.post('/forgot-password', async (req, res) => {
         }
     } catch (err) {
         console.error(err);
-        res.status(500).json({ message: 'Error processing password reset' });
+        res.status(500).json({ message: err.message || 'Error processing password reset' });
     }
 });
 
@@ -279,7 +279,7 @@ router.post('/reset-password', async (req, res) => {
         res.json({ message: 'Password reset successful! You can now log in.' });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ message: 'Error resetting password' });
+        res.status(500).json({ message: err.message || 'Error resetting password' });
     }
 });
 
