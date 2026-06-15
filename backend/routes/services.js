@@ -54,6 +54,16 @@ router.get('/forcesync', async (req, res) => {
 
         const finalServices = providerServices.map(pService => {
             const providerRate = parseFloat(pService.rate);
+            
+            // Extract timing from description if present (e.g. Start Time: 0-10 Mins or 0-1 Hour)
+            let parsedTime = '';
+            if (pService.desc) {
+                const timeMatch = pService.desc.match(/(?:Start Time|🕓 Start Time)\s*:\s*([^\r\n]+)/i);
+                if (timeMatch && timeMatch[1]) {
+                    parsedTime = timeMatch[1].trim();
+                }
+            }
+
             return {
                 providerServiceId: pService.service,
                 name: pService.name,
@@ -63,7 +73,7 @@ router.get('/forcesync', async (req, res) => {
                 min: parseInt(pService.min),
                 max: parseInt(pService.max),
                 type: pService.type,
-                averageTime: pService.time || pService.average_time || timeMap[pService.service] || '30 mins - 1 hour', // Extract dynamic API timing or fallback
+                averageTime: parsedTime || pService.time || pService.average_time || timeMap[pService.service] || '30 mins - 1 hour',
                 active: true
             };
         });
