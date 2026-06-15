@@ -58,6 +58,14 @@ export default function AddFunds() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        // Track AddPaymentInfo event
+        const { trackPixelEvent } = require("@/components/MetaTracking");
+        trackPixelEvent("AddPaymentInfo", {
+            value: Number(amount) || 0,
+            currency: "INR",
+            content_category: method
+        });
+
         if (method === "qr") {
             if (!utr) return alert("Please enter UTR number");
 

@@ -115,6 +115,10 @@ export default function Register() {
             const data = await res.json();
 
             if (res.ok) {
+                // Track CompleteRegistration conversion event
+                const { trackPixelEvent } = require("@/components/MetaTracking");
+                trackPixelEvent("CompleteRegistration", { email: formData.email, username: formData.username });
+                
                 setShowSuccess(true);
             } else {
                 setError(data.message || "Registration failed");

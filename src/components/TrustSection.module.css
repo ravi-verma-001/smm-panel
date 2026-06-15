@@ -1,0 +1,114 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+    padding: 4rem 1rem;
+    max-width: 1280px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.badgesGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 2rem;
+}
+
+.badgeCard {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.icon {
+    color: #2563EB;
+    background: #EFF6FF;
+    padding: 1rem;
+    border-radius: 50%;
+}
+
+.badgeTitle {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1E293B;
+}
+
+.badgeDesc {
+    font-size: 0.9rem;
+    color: #64748B;
+    margin: 0;
+}
+
+.testimonialSection {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+}
+
+.secTitle {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #1E293B;
+}
+
+.reviewsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    width: 100%;
+}
+
+.reviewCard {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 1rem;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.stars {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.reviewText {
+    font-size: 0.95rem;
+    color: #475569;
+    line-height: 1.6;
+    margin: 0;
+    font-style: italic;
+}
+
+.reviewFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #F1F5F9;
+    padding-top: 0.75rem;
+}
+
+.clientName {
+    font-weight: 700;
+    color: #1E293B;
+    font-size: 0.9rem;
+}
+
+.clientService {
+    color: #2563EB;
+    font-size: 0.8rem;
+    font-weight: 600;
+    background: #EFF6FF;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+}

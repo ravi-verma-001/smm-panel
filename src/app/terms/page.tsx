@@ -7,41 +7,41 @@ export default function TermsAndConditions() {
         <div className="min-h-screen bg-slate-50 flex flex-col items-center py-12 px-4 md:px-8">
             <div className="max-w-3xl w-full bg-white rounded-3xl shadow-xl p-8 md:p-12 border border-slate-100">
                 <div className="text-center mb-10">
-                    <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight mb-4">Terms & Conditions</h1>
-                    <p className="text-slate-500 text-sm">Last updated: June 14, 2026</p>
+                    <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight mb-4">Terms of Service</h1>
+                    <p className="text-slate-500 text-sm">Last updated: June 15, 2026</p>
                 </div>
 
                 <div className="prose prose-slate max-w-none text-slate-600 space-y-6 text-[14px] leading-relaxed">
                     <p>
-                        By placing an order with <strong>DovixSMM</strong>, you automatically accept all the below-listed terms of service 
-                        whether you read them or not. We reserve the right to change these terms of service without notice.
+                        By accessing and placing an order with <strong>DovixSMM</strong>, you confirm that you are in agreement with 
+                        and bound by the terms of service contained in the Terms and Conditions outlined below.
                     </p>
 
-                    <h2 className="text-xl font-bold text-slate-800 pt-2">1. Service Delivery</h2>
+                    <h2 className="text-xl font-bold text-slate-800 pt-2">1. General Service Provisions</h2>
                     <p>
-                        DovixSMM is designed to promote your social media profiles (followers, likes, views, etc.). 
-                        You agree to follow all platform rules (Instagram, YouTube, etc.) and not post prohibited content.
-                    </p>
-                    <p>
-                        <strong>Important:</strong> You must set your social account profile to <strong>Public</strong> before placing orders. 
-                        No refunds will be given for private accounts or wrong target link submissions.
+                        DovixSMM is designed strictly to promote your Instagram, YouTube, TikTok, Facebook, or Telegram profiles. 
+                        We do not guarantee that your new followers will interact with you or that views will yield sales/conversions. 
+                        We only guarantee that you receive the specific digital volume you paid for.
                     </p>
 
-                    <h2 className="text-xl font-bold text-slate-800 pt-2">2. Rates & Services</h2>
+                    <h2 className="text-xl font-bold text-slate-800 pt-2">2. Payment & Wallet Terms</h2>
                     <p>
-                        Rates for services are subject to change without notice. We do not guarantee delivery time metrics as they rely on 
-                        external API provider speed and platforms updates, though most orders start instantly.
+                        All deposits added to your DovixSMM wallet balance via secure QR Codes, Stripe, or crypto are final. 
+                        Deposited funds cannot be withdrawn, refunded, or chargebacked back to your payment methods. 
+                        You agree not to file dispute/chargeback actions after depositing funds. Any violation will result in 
+                        immediate account suspension and order reversal.
                     </p>
 
-                    <h2 className="text-xl font-bold text-slate-800 pt-2">3. Payment & Account Balance</h2>
+                    <h2 className="text-xl font-bold text-slate-800 pt-2">3. Refund Policy</h2>
                     <p>
-                        All deposits added to your wallet balance are final. You agree that once a deposit is processed and wallet balance is credited, 
-                        you will not file a chargeback or dispute for any reason.
+                        If an SMM order cannot be executed or fails due to system changes, the specific order value will be 
+                        credited back to your DovixSMM dashboard wallet. No refunds will be processed back to original bank accounts or UPI cards.
                     </p>
 
-                    <h2 className="text-xl font-bold text-slate-800 pt-2">4. Liabilities</h2>
+                    <h2 className="text-xl font-bold text-slate-800 pt-2">4. User Account Suspension</h2>
                     <p>
-                        DovixSMM is in no way liable for any account suspension, shadowban, or deletion by social media networks. Use services at your own discretion.
+                        DovixSMM reserves the right to suspend accounts without prior warning in the event of payment disputes, 
+                        attempts to hack API endpoints, or using automated scripts to register multiple fake accounts.
                     </p>
                 </div>
 

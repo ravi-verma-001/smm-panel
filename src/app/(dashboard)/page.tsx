@@ -211,6 +211,14 @@ export default function Dashboard() {
             return;
         }
 
+        // Track InitiateCheckout
+        const { trackPixelEvent } = require("@/components/MetaTracking");
+        trackPixelEvent("InitiateCheckout", {
+            value: charge,
+            currency: "INR",
+            content_name: selectedService.name
+        });
+
         try {
             const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
             const res = await fetch(`${API_URL}/api/orders/create`, {
@@ -229,6 +237,13 @@ export default function Dashboard() {
             const data = await res.json();
 
             if (res.ok) {
+                // Track Purchase Event
+                trackPixelEvent("Purchase", {
+                    value: charge,
+                    currency: "INR",
+                    content_name: selectedService.name
+                });
+
                 setShowSuccessModal(true);
                 setLink("");
                 setQuantity("");

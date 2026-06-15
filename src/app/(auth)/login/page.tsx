@@ -99,6 +99,10 @@ export default function Login() {
             const data = await res.json();
 
             if (res.ok) {
+                // Track Login event
+                const { trackPixelEvent } = require("@/components/MetaTracking");
+                trackPixelEvent("Login", { email });
+
                 // Login successful - context handles storage and redirect
                 login(data.token, data.user);
             } else {
