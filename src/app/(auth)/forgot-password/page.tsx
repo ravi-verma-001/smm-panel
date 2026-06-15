@@ -10,13 +10,10 @@ export default function ForgotPassword() {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
-    const [debugLink, setDebugLink] = useState("");
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         setMessage(null);
-        setDebugLink("");
 
         try {
             const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
@@ -31,11 +28,8 @@ export default function ForgotPassword() {
             if (res.ok) {
                 setMessage({
                     type: 'success',
-                    text: data.message
+                    text: "A password reset link has been sent to your email inbox! Please check your inbox or spam folder."
                 });
-                if (data.debugLink) {
-                    setDebugLink(data.debugLink);
-                }
             } else {
                 setMessage({
                     type: 'error',
@@ -85,15 +79,6 @@ export default function ForgotPassword() {
                         {loading ? "Sending Link..." : "Send Reset Link"}
                     </button>
                 </form>
-
-                {debugLink && (
-                    <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-xl text-center">
-                        <p className="text-xs text-blue-600 mb-2 font-medium">Development Debug Link:</p>
-                        <Link href={debugLink} className="inline-block bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2 px-4 rounded-lg transition-colors">
-                            Click here to Reset Password
-                        </Link>
-                    </div>
-                )}
 
                 <p className={styles.footer}>
                     Remembered your password?
