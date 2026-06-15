@@ -63,7 +63,7 @@ router.get('/forcesync', async (req, res) => {
                 min: parseInt(pService.min),
                 max: parseInt(pService.max),
                 type: pService.type,
-                averageTime: timeMap[pService.service] || '30 mins - 1 hour', // Preserve custom time or set default
+                averageTime: pService.time || pService.average_time || timeMap[pService.service] || '30 mins - 1 hour', // Extract dynamic API timing or fallback
                 active: true
             };
         });
