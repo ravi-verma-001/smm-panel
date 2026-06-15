@@ -21,7 +21,8 @@ import {
     PlayCircle,
     AlertCircle,
     X,
-    Shield
+    Shield,
+    ChevronDown
 } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
@@ -65,10 +66,13 @@ export default function Dashboard() {
     const [balance, setBalance] = useState(0);
     const [totalSpent, setTotalSpent] = useState("0.00");
     const [totalOrders, setTotalOrders] = useState("0");
+    const [isBalanceHovered, setIsBalanceHovered] = useState(false);
 
     // Order form states
     const [services, setServices] = useState<Service[]>([]);
     const [category, setCategory] = useState(PLATFORMS[0]);
+    const [selectedSubCategory, setSelectedSubCategory] = useState<string>("");
+    const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
     const [selectedServiceId, setSelectedServiceId] = useState<string>("");
     const [link, setLink] = useState("");
     const [quantity, setQuantity] = useState<number | "">("");
@@ -77,6 +81,18 @@ export default function Dashboard() {
     const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+
+    // Close category dropdown on click outside
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            const target = event.target as HTMLElement;
+            if (!target.closest(`.${styles.customSelectContainer}`)) {
+                setIsCategoryDropdownOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
 
     // Fetch Stats & Services
     useEffect(() => {
@@ -115,11 +131,30 @@ export default function Dashboard() {
         fetchDashboardData();
     }, [token]);
 
-    const filteredServices = useMemo(() => {
+    const platformServices = useMemo(() => {
         return services.filter(s => 
             s.category.toLowerCase().includes(category.toLowerCase())
         );
     }, [services, category]);
+
+    const categoriesForPlatform = useMemo(() => {
+        const cats = platformServices.map(s => s.category.trim());
+        return Array.from(new Set(cats)).sort();
+    }, [platformServices]);
+
+    useEffect(() => {
+        if (categoriesForPlatform.length > 0) {
+            setSelectedSubCategory(categoriesForPlatform[0]);
+        } else {
+            setSelectedSubCategory("");
+        }
+    }, [categoriesForPlatform]);
+
+    const filteredServices = useMemo(() => {
+        return platformServices.filter(s => 
+            s.category.trim() === selectedSubCategory.trim()
+        );
+    }, [platformServices, selectedSubCategory]);
 
     // Auto-select first service when category changes
     useEffect(() => {
@@ -280,15 +315,33 @@ export default function Dashboard() {
             {/* Authenticated Dashboard Stats */}
             {token && (
                 <div className={styles.statsGrid}>
-                    <div className={styles.statCard}>
-                        <div className={styles.statIconWrapper}>
-                            <Wallet size={24} />
-                        </div>
-                        <div className={styles.statInfo}>
-                            <span className={styles.statLabel}>Available Balance</span>
-                            <span className={styles.statValue}>₹{balance.toFixed(2)}</span>
-                        </div>
-                    </div>
+                    <Link
+                        href="/funds"
+                        className={`${styles.statCard} ${styles.balanceCard}`}
+                        onMouseEnter={() => setIsBalanceHovered(true)}
+                        onMouseLeave={() => setIsBalanceHovered(false)}
+                    >
+                        {isBalanceHovered ? (
+                            <div className={styles.balanceHoverContent}>
+                                <div className={`${styles.statIconWrapper} ${styles.balanceIconHover}`}>
+                                    <Wallet size={24} />
+                                </div>
+                                <div className={styles.statInfo}>
+                                    <span className={styles.addFundLabel}>Add Fund</span>
+                                </div>
+                            </div>
+                        ) : (
+                            <>
+                                <div className={styles.statIconWrapper}>
+                                    <Wallet size={24} />
+                                </div>
+                                <div className={styles.statInfo}>
+                                    <span className={styles.statLabel}>Available Balance</span>
+                                    <span className={styles.statValue}>₹{balance.toFixed(2)}</span>
+                                </div>
+                            </>
+                        )}
+                    </Link>
                     <div className={styles.statCard}>
                         <div className={styles.statIconWrapper}>
                             <CreditCard size={24} />
@@ -341,6 +394,45 @@ export default function Dashboard() {
                                         <span className={styles.categoryName}>{plt}</span>
                                     </button>
                                 ))}
+                            </div>
+                        </div>
+
+                        <div className={styles.field}>
+                            <label className={styles.label}>Category</label>
+                            <div className={styles.customSelectContainer}>
+                                <button
+                                    type="button"
+                                    className={styles.customSelectTrigger}
+                                    onClick={() => setIsCategoryDropdownOpen(!isCategoryDropdownOpen)}
+                                >
+                                    <span className={styles.triggerLeft}>
+                                        <span className={styles.optionIcon}>
+                                            {getCategoryIcon(selectedSubCategory)}
+                                        </span>
+                                        <span className={styles.triggerText}>{selectedSubCategory || "Select Category"}</span>
+                                    </span>
+                                    <ChevronDown size={18} className={`${styles.chevron} ${isCategoryDropdownOpen ? styles.chevronOpen : ""}`} />
+                                </button>
+                                
+                                {isCategoryDropdownOpen && (
+                                    <div className={styles.customSelectOptions}>
+                                        {categoriesForPlatform.map(cat => (
+                                            <div
+                                                key={cat}
+                                                className={`${styles.customOption} ${selectedSubCategory === cat ? styles.customOptionActive : ""}`}
+                                                onClick={() => {
+                                                    setSelectedSubCategory(cat);
+                                                    setIsCategoryDropdownOpen(false);
+                                                }}
+                                            >
+                                                <span className={styles.optionIcon}>
+                                                    {getCategoryIcon(cat)}
+                                                </span>
+                                                <span className={styles.optionText}>{cat}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                         </div>
 

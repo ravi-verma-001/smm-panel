@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { AlertCircle, X, Instagram, Facebook, Youtube, Send, Music2, Twitter, Globe, Linkedin, MessageCircle, PlayCircle } from "lucide-react";
+import { AlertCircle, X, Instagram, Facebook, Youtube, Send, Music2, Twitter, Globe, Linkedin, MessageCircle, PlayCircle, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import styles from "./page.module.css";
 
@@ -22,6 +22,8 @@ const PLATFORMS = ["Instagram", "Facebook", "Telegram", "YouTube"];
 export default function NewOrder() {
     const [services, setServices] = useState<Service[]>([]);
     const [category, setCategory] = useState(PLATFORMS[0]);
+    const [selectedSubCategory, setSelectedSubCategory] = useState<string>("");
+    const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
     const [selectedServiceId, setSelectedServiceId] = useState<string>("");
     const [link, setLink] = useState("");
     const [quantity, setQuantity] = useState<number | "">("");
@@ -48,6 +50,18 @@ export default function NewOrder() {
         if (successTimer) clearTimeout(successTimer);
         setShowSuccessModal(false);
     };
+
+    // Close category dropdown on click outside
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            const target = event.target as HTMLElement;
+            if (!target.closest(`.${styles.customSelectContainer}`)) {
+                setIsCategoryDropdownOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
 
     // Fetch Services on Load
     useEffect(() => {
@@ -84,11 +98,30 @@ export default function NewOrder() {
         fetchServicesAndBalance();
     }, []);
 
-    const filteredServices = useMemo(() => {
+    const platformServices = useMemo(() => {
         return services.filter(s => 
             s.category.toLowerCase().includes(category.toLowerCase())
         );
     }, [services, category]);
+
+    const categoriesForPlatform = useMemo(() => {
+        const cats = platformServices.map(s => s.category.trim());
+        return Array.from(new Set(cats)).sort();
+    }, [platformServices]);
+
+    useEffect(() => {
+        if (categoriesForPlatform.length > 0) {
+            setSelectedSubCategory(categoriesForPlatform[0]);
+        } else {
+            setSelectedSubCategory("");
+        }
+    }, [categoriesForPlatform]);
+
+    const filteredServices = useMemo(() => {
+        return platformServices.filter(s => 
+            s.category.trim() === selectedSubCategory.trim()
+        );
+    }, [platformServices, selectedSubCategory]);
 
     // Auto-select first service when category changes
     useEffect(() => {
@@ -282,6 +315,45 @@ export default function NewOrder() {
                                         <span className={styles.categoryName}>{plt}</span>
                                     </button>
                                 ))}
+                            </div>
+                        </div>
+
+                        <div className={styles.field}>
+                            <label className={styles.label}>Category</label>
+                            <div className={styles.customSelectContainer}>
+                                <button
+                                    type="button"
+                                    className={styles.customSelectTrigger}
+                                    onClick={() => setIsCategoryDropdownOpen(!isCategoryDropdownOpen)}
+                                >
+                                    <span className={styles.triggerLeft}>
+                                        <span className={styles.optionIcon}>
+                                            {getCategoryIcon(selectedSubCategory)}
+                                        </span>
+                                        <span className={styles.triggerText}>{selectedSubCategory || "Select Category"}</span>
+                                    </span>
+                                    <ChevronDown size={18} className={`${styles.chevron} ${isCategoryDropdownOpen ? styles.chevronOpen : ""}`} />
+                                </button>
+                                
+                                {isCategoryDropdownOpen && (
+                                    <div className={styles.customSelectOptions}>
+                                        {categoriesForPlatform.map(cat => (
+                                            <div
+                                                key={cat}
+                                                className={`${styles.customOption} ${selectedSubCategory === cat ? styles.customOptionActive : ""}`}
+                                                onClick={() => {
+                                                    setSelectedSubCategory(cat);
+                                                    setIsCategoryDropdownOpen(false);
+                                                }}
+                                            >
+                                                <span className={styles.optionIcon}>
+                                                    {getCategoryIcon(cat)}
+                                                </span>
+                                                <span className={styles.optionText}>{cat}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                         </div>
 

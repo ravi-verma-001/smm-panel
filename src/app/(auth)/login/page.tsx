@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import styles from "../auth.module.css";
 
@@ -11,6 +11,77 @@ export default function Login() {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const { login } = useAuth(); // Use the login function from context
+
+    const handleGoogleCredentialResponse = async (response: any) => {
+        setLoading(true);
+        setError("");
+        try {
+            const jwtToken = response.credential;
+            const base64Url = jwtToken.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+
+            const payload = JSON.parse(jsonPayload);
+            const { email, name } = payload;
+
+            const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
+            const res = await fetch(`${API_URL}/api/auth/google-login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, name }),
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                login(data.token, data.user);
+            } else {
+                setError(data.message || "Google Authentication failed");
+            }
+        } catch (err) {
+            setError("Google login failed, make sure backend server is running");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        // Load GIS client script
+        const script = document.createElement("script");
+        script.src = "https://accounts.google.com/gsi/client";
+        script.async = true;
+        script.defer = true;
+        document.body.appendChild(script);
+
+        script.onload = () => {
+            const google = (window as any).google;
+            if (google) {
+                google.accounts.id.initialize({
+                    client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "1056581458994-demo.apps.googleusercontent.com",
+                    callback: handleGoogleCredentialResponse
+                });
+
+                // Render the official Google Sign-In button
+                const btnContainer = document.getElementById("google-signin-btn");
+                if (btnContainer) {
+                    google.accounts.id.renderButton(btnContainer, {
+                        theme: "outline",
+                        size: "large",
+                        width: btnContainer.clientWidth || 340,
+                        text: "signin_with"
+                    });
+                }
+            }
+        };
+
+        return () => {
+            if (document.body.contains(script)) {
+                document.body.removeChild(script);
+            }
+        };
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -126,6 +197,12 @@ export default function Login() {
                         {loading ? "Signing In..." : "Sign In"}
                     </button>
                 </form>
+
+                <div className={styles.orDivider}>or</div>
+
+                <div className="flex justify-center w-full mt-2">
+                    <div id="google-signin-btn"></div>
+                </div>
 
                 <p className={styles.footer} style={{ marginBottom: '1.5rem' }}>
                     Don&apos;t have an account?

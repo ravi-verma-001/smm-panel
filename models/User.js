@@ -6,6 +6,8 @@ const userSchema = new mongoose.Schema({
     password: { type: String }, // For future use if manual auth is added for users
     walletBalance: { type: Number, default: 0 },
     isAdmin: { type: Boolean, default: false },
+    resetPasswordToken: { type: String },
+    resetPasswordExpires: { type: Date },
     createdAt: { type: Date, default: Date.now }
 });
 
