@@ -53,12 +53,12 @@ router.get('/forcesync', async (req, res) => {
         }
 
         const finalServices = providerServices.map(pService => {
-            const providerRate = parseFloat(pService.rate) * exchangeRate;
+            const providerRate = parseFloat(pService.rate);
             return {
                 providerServiceId: pService.service,
                 name: pService.name,
                 category: pService.category,
-                rate: providerRate * 1.30, // Convert to INR and add 30% margin
+                rate: providerRate * 1.30, // Directly add 30% margin on INR rate
                 originalRate: providerRate, // Store base cost in INR
                 min: parseInt(pService.min),
                 max: parseInt(pService.max),
