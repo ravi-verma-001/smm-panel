@@ -195,45 +195,72 @@ router.post('/forgot-password', async (req, res) => {
         user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
         await user.save();
 
-        // Check if SMTP is configured
+        // Check if Resend API or SMTP is configured
+        const isResendConfigured = !!process.env.RESEND_API_KEY;
         const isSmtpConfigured = process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS;
 
         const resetUrl = `${req.headers.origin || 'http://localhost:3000'}/reset-password?token=${token}`;
+        
+        const emailHtml = `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
+                <h2 style="color: #2563eb; text-align: center;">DovixSMM Password Reset</h2>
+                <p>Hello ${user.username},</p>
+                <p>You requested a password reset for your account on DovixSMM.</p>
+                <p>Please click the button below to reset your password. This link is valid for 1 hour.</p>
+                <div style="text-align: center; margin: 30px 0;">
+                    <a href="${resetUrl}" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold;">Reset Password</a>
+                </div>
+                <p>If you did not request this, please ignore this email and your password will remain unchanged.</p>
+                <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 30px 0;">
+                <p style="font-size: 12px; color: #64748b; text-align: center;">DovixSMM - Cheapest SMM Reseller Panel</p>
+            </div>
+        `;
 
-        if (isSmtpConfigured) {
-            // Send real email
+        if (isResendConfigured) {
+            console.log('Sending reset password email via Resend API...');
+            // Send email via Resend HTTP API (Bypasses SMTP port blocking!)
+            const axios = require('axios');
+            try {
+                await axios.post('https://api.resend.com/emails', {
+                    from: 'DovixSMM <onboarding@resend.dev>',
+                    to: user.email,
+                    subject: 'DovixSMM Password Reset Request',
+                    html: emailHtml
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                console.log('Email sent successfully via Resend API.');
+                return res.json({ message: 'A real password reset link has been sent to your email inbox!' });
+            } catch (resendError) {
+                console.error('Resend API failed:', resendError.response ? resendError.response.data : resendError.message);
+                throw new Error('Resend API delivery failed: ' + (resendError.response && resendError.response.data && resendError.response.data.message ? resendError.response.data.message : resendError.message));
+            }
+        } else if (isSmtpConfigured) {
+            console.log('Sending reset password email via SMTP...');
+            // Send via SMTP
             const transporter = nodemailer.createTransport({
                 host: process.env.SMTP_HOST,
-                port: parseInt(process.env.SMTP_PORT || '587'),
+                port: parseInt(process.env.SMTP_PORT || '465'),
                 secure: process.env.SMTP_SECURE === 'true',
                 auth: {
                     user: process.env.SMTP_USER,
                     pass: process.env.SMTP_PASS
                 },
-                family: 4 // Force IPv4 to bypass Render IPv6 routing network limitations
+                family: 4 // Force IPv4
             });
 
             const mailOptions = {
                 to: user.email,
                 from: process.env.SMTP_USER,
                 subject: 'DovixSMM Password Reset Request',
-                html: `
-                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
-                        <h2 style="color: #2563eb; text-align: center;">DovixSMM Password Reset</h2>
-                        <p>Hello ${user.username},</p>
-                        <p>You requested a password reset for your account on DovixSMM.</p>
-                        <p>Please click the button below to reset your password. This link is valid for 1 hour.</p>
-                        <div style="text-align: center; margin: 30px 0;">
-                            <a href="${resetUrl}" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold;">Reset Password</a>
-                        </div>
-                        <p>If you did not request this, please ignore this email and your password will remain unchanged.</p>
-                        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 30px 0;">
-                        <p style="font-size: 12px; color: #64748b; text-align: center;">DovixSMM - Cheapest SMM Reseller Panel</p>
-                    </div>
-                `
+                html: emailHtml
             };
 
             await transporter.sendMail(mailOptions);
+            console.log('Email sent successfully via SMTP.');
             return res.json({ message: 'A real password reset link has been sent to your email inbox!' });
         } else {
             // SMTP is not configured - log in backend terminal and return simulation message
