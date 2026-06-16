@@ -179,7 +179,7 @@ export default function GuestLanding() {
             {/* Navbar Header corresponding to Screenshot 1 */}
             <header className={styles.navbar}>
                 <Link href="/" className={styles.logo}>
-                    SMM<span className={styles.logoAccent}>RESELL</span>
+                    Dovix<span className={styles.logoAccent}>SMM</span>
                 </Link>
                 <div className={styles.navLinks}>
                     <Link href="/login" className={styles.navLink}>Sign in</Link>
@@ -208,7 +208,7 @@ export default function GuestLanding() {
                         #1 WORLD TOP SMM SERVICE <span className={styles.heroTitleHighlight}>PROVIDER</span> 🔥
                     </h1>
                     <p className={styles.heroText}>
-                        SMMResell World&apos;s #1 Cheapest SMM Panel &quot;offers the most affordable and fastest SMM panel for resellers. 24/7 support. Get instant likes, views, and Boost & Start growing on Instagram, YouTube, Telegram & more with real, instant engagement.
+                        DovixSMM World&apos;s #1 Cheapest SMM Panel &quot;offers the most affordable and fastest SMM panel for resellers. 24/7 support. Get instant likes, views, and Boost & Start growing on Instagram, YouTube, Telegram & more with real, instant engagement.
                     </p>
                     <p className={styles.heroText}>
                         Join us to experience top-notch SMM services tailored to meet all your social media marketing needs!
@@ -304,9 +304,9 @@ export default function GuestLanding() {
             {/* Why Choose Us Section (Screenshot 2) */}
             <section className={styles.chooseUsSection}>
                 <div className={styles.sectionHeader}>
-                    <h2 className={styles.sectionTitle}>Why Choose SMMResell?</h2>
+                    <h2 className={styles.sectionTitle}>Why Choose DovixSMM?</h2>
                     <p className={styles.sectionSubtitle}>
-                        Discover the competitive advantages that make SMMResell the preferred choice for social media growth
+                        Discover the competitive advantages that make DovixSMM the preferred choice for social media growth
                     </p>
                 </div>
 
@@ -317,7 +317,7 @@ export default function GuestLanding() {
                         </div>
                         <h3 className={styles.cardTitleText}>Premium Quality Services</h3>
                         <p className={styles.cardDescText}>
-                            SMMResell delivers exceptional quality social media marketing services with high retention rates, genuine engagement, and real accounts.
+                            DovixSMM delivers exceptional quality social media marketing services with high retention rates, genuine engagement, and real accounts.
                         </p>
                     </div>
 
@@ -358,7 +358,7 @@ export default function GuestLanding() {
                 <div className={styles.sectionHeader}>
                     <h2 className={styles.sectionTitle}>SERVICES WE OFFERS</h2>
                     <p className={styles.sectionSubtitle}>
-                        At SMMResell, we provide the cheapest and best SMM panel services to help you grow on all major platforms. Whether you need Instagram followers, Facebook likes, YouTube views, Twitter engagement, or TikTok growth – we&apos;ve got you covered.
+                        At DovixSMM, we provide the cheapest and best SMM panel services to help you grow on all major platforms. Whether you need Instagram followers, Facebook likes, YouTube views, Twitter engagement, or TikTok growth – we&apos;ve got you covered.
                     </p>
                 </div>
 
@@ -401,13 +401,13 @@ export default function GuestLanding() {
                         <Sparkles size={16} /> Discover Powerful Services
                     </div>
                     <h2 className={styles.streamerTitle}>
-                        Cheapest SMM Panel for Streamers & Content Creators – SMMResell
+                        Cheapest SMM Panel for Streamers & Content Creators – DovixSMM
                     </h2>
                     <p className={styles.streamerText}>
-                        If you are looking for the best SMM panel to grow your streams and social media accounts, SMMResell.shop is your trusted partner. We provide cheap and reliable SMM reseller services that help you get real followers, likes, comments, and viewers on platforms like Twitch, YouTube, TikTok, Kick.com, Trovo, Facebook, Instagram, and more.
+                        If you are looking for the best SMM panel to grow your streams and social media accounts, DovixSMM.com is your trusted partner. We provide cheap and reliable SMM reseller services that help you get real followers, likes, comments, and viewers on platforms like Twitch, YouTube, TikTok, Kick.com, Trovo, Facebook, Instagram, and more.
                     </p>
                     <p className={styles.streamerText}>
-                        At SMMResell, we focus on helping streamers, influencers, and resellers achieve faster growth with our social media marketing panel. Our services are fully automated, 100% safe, and come with instant delivery to make sure you never miss out on engagement. Take your content to the next level today!
+                        At DovixSMM, we focus on helping streamers, influencers, and resellers achieve faster growth with our social media marketing panel. Our services are fully automated, 100% safe, and come with instant delivery to make sure you never miss out on engagement. Take your content to the next level today!
                     </p>
                 </div>
 
