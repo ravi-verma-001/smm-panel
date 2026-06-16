@@ -55,7 +55,7 @@ export default function AdminDashboard() {
     const fetchStats = async () => {
         try {
             setLoading(true);
-            const token = localStorage.getItem("token");
+            const token = localStorage.getItem("adminToken");
             const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
             
             const res = await fetch(`${API_URL}/api/admin/stats`, {

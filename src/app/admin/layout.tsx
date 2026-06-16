@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
     LayoutDashboard,
     Wallet,
@@ -14,7 +14,7 @@ import {
     ChevronRight,
     Settings
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./admin.module.css";
 
 // Clean Admin Sidebar
@@ -140,11 +140,41 @@ export default function AdminLayout({
     children: React.ReactNode;
 }) {
     const pathname = usePathname();
+    const router = useRouter();
     const isLoginPage = pathname === "/admin/login";
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [authorized, setAuthorized] = useState(false);
+    const [checking, setChecking] = useState(true);
+
+    useEffect(() => {
+        if (!isLoginPage) {
+            const adminToken = localStorage.getItem("adminToken");
+            if (!adminToken) {
+                // If no admin token, redirect to login page
+                window.location.href = "/admin/login";
+            } else {
+                setAuthorized(true);
+            }
+            setChecking(false);
+        } else {
+            setChecking(false);
+        }
+    }, [isLoginPage]);
+
+    if (checking) {
+        return (
+            <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+                <div className="text-slate-500 font-medium text-sm animate-pulse">Checking Authorization...</div>
+            </div>
+        );
+    }
 
     if (isLoginPage) {
         return <>{children}</>;
+    }
+
+    if (!authorized) {
+        return null; // Don't show layout if not authorized
     }
 
     return (
