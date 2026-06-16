@@ -34,6 +34,14 @@ export default function NewOrder() {
     const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [successTimer, setSuccessTimer] = useState<NodeJS.Timeout | null>(null);
+    const [lastOrderDetails, setLastOrderDetails] = useState<{
+        id: string;
+        serviceName: string;
+        link: string;
+        quantity: number;
+        charge: number;
+        balance: number;
+    } | null>(null);
 
     // Auto-close success modal after 3 seconds
     useEffect(() => {
@@ -190,9 +198,17 @@ export default function NewOrder() {
             const data = await res.json();
 
             if (res.ok) {
-                setShowSuccessModal(true); // Show popup instead of inline message
+                setLastOrderDetails({
+                    id: data.externalOrderId || data.orderId,
+                    serviceName: selectedService.name,
+                    link: link,
+                    quantity: Number(quantity),
+                    charge: charge,
+                    balance: data.balance !== undefined ? data.balance : (balance - charge)
+                });
                 setLink("");
                 setQuantity("");
+                setBalance(data.balance !== undefined ? data.balance : (balance - charge));
             } else {
                 setMessage({ type: 'error', text: data.message || "Order Failed" });
             }
@@ -297,6 +313,41 @@ export default function NewOrder() {
 
             <div className={styles.grid}>
                 <div className={styles.formCard}>
+                    {/* Inline Success Alert Banner */}
+                    {lastOrderDetails && (
+                        <div className={styles.successAlert}>
+                            <div className={styles.successAlertTitle}>
+                                <span>✅</span> Order Received!
+                            </div>
+                            <div className={styles.successAlertDetails}>
+                                <div className={styles.successAlertRow}>
+                                    <span className={styles.successAlertLabel}>ID:</span>
+                                    <span className={styles.successAlertValue}>{lastOrderDetails.id}</span>
+                                </div>
+                                <div className={styles.successAlertRow}>
+                                    <span className={styles.successAlertLabel}>Service Name:</span>
+                                    <span className={styles.successAlertValue}>{lastOrderDetails.serviceName}</span>
+                                </div>
+                                <div className={styles.successAlertRow}>
+                                    <span className={styles.successAlertLabel}>Link:</span>
+                                    <span className={styles.successAlertValue}>{lastOrderDetails.link}</span>
+                                </div>
+                                <div className={styles.successAlertRow}>
+                                    <span className={styles.successAlertLabel}>Quantity:</span>
+                                    <span className={styles.successAlertValue}>{lastOrderDetails.quantity.toLocaleString()}</span>
+                                </div>
+                                <div className={styles.successAlertRow}>
+                                    <span className={styles.successAlertLabel}>Charge:</span>
+                                    <span className={styles.successAlertValue}>₹{lastOrderDetails.charge.toFixed(2)}</span>
+                                </div>
+                                <div className={styles.successAlertRow}>
+                                    <span className={styles.successAlertLabel}>Available balance:</span>
+                                    <span className={styles.successAlertValue}>₹{lastOrderDetails.balance.toFixed(2)}</span>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     <form onSubmit={handleSubmit} className={styles.form}>
                         <div className={styles.field}>
                             <label className={styles.label}>Select Platform</label>

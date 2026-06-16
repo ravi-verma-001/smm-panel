@@ -81,6 +81,14 @@ export default function Dashboard() {
     const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+    const [lastOrderDetails, setLastOrderDetails] = useState<{
+        id: string;
+        serviceName: string;
+        link: string;
+        quantity: number;
+        charge: number;
+        balance: number;
+    } | null>(null);
 
     // Close category dropdown on click outside
     useEffect(() => {
@@ -244,11 +252,19 @@ export default function Dashboard() {
                     content_name: selectedService.name
                 });
 
-                setShowSuccessModal(true);
+                setLastOrderDetails({
+                    id: data.externalOrderId || data.orderId,
+                    serviceName: selectedService.name,
+                    link: link,
+                    quantity: Number(quantity),
+                    charge: charge,
+                    balance: data.balance !== undefined ? data.balance : (balance - charge)
+                });
+
                 setLink("");
                 setQuantity("");
                 // Refresh balance
-                setBalance(prev => prev - charge);
+                setBalance(data.balance !== undefined ? data.balance : (balance - charge));
             } else {
                 alert(data.message || "Order Failed");
             }
@@ -391,6 +407,42 @@ export default function Dashboard() {
             <div className={styles.contentGrid}>
                 <div className={styles.formCard}>
                     <h2 className="text-xl font-bold text-slate-800 mb-6">Place a New Order</h2>
+                    
+                    {/* Inline Success Alert Banner */}
+                    {lastOrderDetails && (
+                        <div className={styles.successAlert}>
+                            <div className={styles.successAlertTitle}>
+                                <span>✅</span> Order Received!
+                            </div>
+                            <div className={styles.successAlertDetails}>
+                                <div className={styles.successAlertRow}>
+                                    <span className={styles.successAlertLabel}>ID:</span>
+                                    <span className={styles.successAlertValue}>{lastOrderDetails.id}</span>
+                                </div>
+                                <div className={styles.successAlertRow}>
+                                    <span className={styles.successAlertLabel}>Service Name:</span>
+                                    <span className={styles.successAlertValue}>{lastOrderDetails.serviceName}</span>
+                                </div>
+                                <div className={styles.successAlertRow}>
+                                    <span className={styles.successAlertLabel}>Link:</span>
+                                    <span className={styles.successAlertValue}>{lastOrderDetails.link}</span>
+                                </div>
+                                <div className={styles.successAlertRow}>
+                                    <span className={styles.successAlertLabel}>Quantity:</span>
+                                    <span className={styles.successAlertValue}>{lastOrderDetails.quantity.toLocaleString()}</span>
+                                </div>
+                                <div className={styles.successAlertRow}>
+                                    <span className={styles.successAlertLabel}>Charge:</span>
+                                    <span className={styles.successAlertValue}>₹{lastOrderDetails.charge.toFixed(2)}</span>
+                                </div>
+                                <div className={styles.successAlertRow}>
+                                    <span className={styles.successAlertLabel}>Available balance:</span>
+                                    <span className={styles.successAlertValue}>₹{lastOrderDetails.balance.toFixed(2)}</span>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     <form onSubmit={handleOrderSubmit} className={styles.form}>
                         <div className={styles.field}>
                             <label className={styles.label}>Select Platform</label>

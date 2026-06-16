@@ -1,25 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Search, Filter } from "lucide-react";
+import { useState, useEffect, useMemo } from "react";
+import { Search, Filter, Star, Info, X } from "lucide-react";
 import styles from "./page.module.css";
-
-const servicesData = [
-    { id: 1, name: "Instagram Followers [High Quality]", rate: 0.90, min: 10, max: 20000, category: "Instagram" },
-    { id: 2, name: "Instagram Likes [Instant]", rate: 0.20, min: 50, max: 50000, category: "Instagram" },
-    { id: 3, name: "YouTube Views [Retention]", rate: 2.50, min: 1000, max: 1000000, category: "YouTube" },
-    { id: 4, name: "YouTube Subscribers", rate: 15.00, min: 100, max: 10000, category: "YouTube" },
-    { id: 5, name: "TikTok Followers", rate: 3.50, min: 100, max: 10000, category: "TikTok" },
-    { id: 6, name: "TikTok Shares", rate: 0.50, min: 50, max: 100000, category: "TikTok" },
-    { id: 7, name: "Facebook Page Likes", rate: 12.00, min: 100, max: 5000, category: "Facebook" },
-    { id: 8, name: "Twitter/X Followers", rate: 8.00, min: 100, max: 10000, category: "Twitter" },
-];
 
 export default function Services() {
     const [search, setSearch] = useState("");
     const [category, setCategory] = useState("All");
     const [services, setServices] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    
+    // Modal states
+    const [selectedService, setSelectedService] = useState<any | null>(null);
 
     useEffect(() => {
         fetchServices();
@@ -48,6 +40,29 @@ export default function Services() {
         const matchesCategory = category === "All" || service.category === category;
         return matchesSearch && matchesCategory;
     });
+
+    // Group services by category for SMMResell layout style
+    const groupedServices = useMemo(() => {
+        const groups: { [key: string]: any[] } = {};
+        filteredServices.forEach(service => {
+            if (!groups[service.category]) {
+                groups[service.category] = [];
+            }
+            groups[service.category].push(service);
+        });
+        return groups;
+    }, [filteredServices]);
+
+    const getCategoryIconEmoji = (catName: string) => {
+        const cat = catName.toLowerCase();
+        if (cat.includes("tiktok")) return "🎵";
+        if (cat.includes("instagram") || cat.includes("ig")) return "📸";
+        if (cat.includes("facebook") || cat.includes("fb")) return "👥";
+        if (cat.includes("youtube") || cat.includes("yt")) return "🎥";
+        if (cat.includes("telegram") || cat.includes("tg")) return "📢";
+        if (cat.includes("twitter") || cat.includes("x")) return "🐦";
+        return "⚡";
+    };
 
     return (
         <div className={styles.container}>
@@ -86,36 +101,122 @@ export default function Services() {
                     <table className={styles.table}>
                         <thead>
                             <tr>
+                                <th className={styles.starCol}></th>
                                 <th>ID</th>
-                                <th>Service</th>
+                                <th>Service Name</th>
                                 <th>Rate / 1000</th>
-                                <th>Min / Max</th>
-                                <th>Average Time</th>
-                                <th>Category</th>
+                                <th>Min</th>
+                                <th>Max</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredServices.map(service => (
-                                <tr key={service._id}>
-                                    <td className={styles.id}>{service.providerServiceId}</td>
-                                    <td className={styles.name}>{service.name}</td>
-                                    <td className={styles.rate}>₹{service.rate.toFixed(2)}</td>
-                                    <td className={styles.limits}>{service.min} / {service.max.toLocaleString()}</td>
-                                    <td className={styles.time}>{service.averageTime || '30 mins - 1 hour'}</td>
-                                    <td>
-                                        <span className={styles.categoryBadge}>{service.category}</span>
-                                    </td>
-                                </tr>
-                            ))}
-                            {filteredServices.length === 0 && (
+                            {Object.keys(groupedServices).length === 0 ? (
                                 <tr>
-                                    <td colSpan={5} className={styles.noResults}>No services found matching your criteria.</td>
+                                    <td colSpan={7} className={styles.noResults}>No services found matching your criteria.</td>
                                 </tr>
+                            ) : (
+                                Object.keys(groupedServices).map(cat => (
+                                    <>
+                                        {/* Category Header Row */}
+                                        <tr key={cat} className={styles.categoryHeaderRow}>
+                                            <td colSpan={7} className={styles.categoryHeaderCell}>
+                                                <div className={styles.categoryTitleContent}>
+                                                    <span className={styles.categoryIcon}>{getCategoryIconEmoji(cat)}</span>
+                                                    <span>{cat}</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {/* Services list under this category */}
+                                        {groupedServices[cat].map(service => (
+                                            <tr key={service._id}>
+                                                <td className={styles.starCol}>
+                                                    <Star size={16} className={styles.starIcon} />
+                                                </td>
+                                                <td>
+                                                    <span className={styles.idBadge}>{service.providerServiceId}</span>
+                                                </td>
+                                                <td className={styles.nameCol}>
+                                                    <span className={styles.namePrefix}>»</span>
+                                                    <span className={styles.nameText}>{service.name}</span>
+                                                </td>
+                                                <td>
+                                                    <span className={styles.rate}>₹{service.rate.toFixed(2)}</span>
+                                                </td>
+                                                <td className={styles.limits}>{service.min}</td>
+                                                <td className={styles.limits}>{service.max.toLocaleString()}</td>
+                                                <td>
+                                                    <button 
+                                                        className={styles.detailsBtn}
+                                                        onClick={() => setSelectedService(service)}
+                                                    >
+                                                        <Info size={13} />
+                                                        Details
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </>
+                                ))
                             )}
                         </tbody>
                     </table>
                 )}
             </div>
+
+            {/* Service Details Modal */}
+            {selectedService && (
+                <div className={styles.modalOverlay} onClick={() => setSelectedService(null)}>
+                    <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+                        <div className={styles.modalHeader}>
+                            <h3 className={styles.modalTitle}>Service #{selectedService.providerServiceId} Details</h3>
+                            <button className={styles.modalCloseBtn} onClick={() => setSelectedService(null)}>
+                                <X size={20} />
+                            </button>
+                        </div>
+                        <div className={styles.modalBody}>
+                            <div>
+                                <h4 className={styles.modalSectionTitle}>Service Name</h4>
+                                <p className={styles.modalText}>{selectedService.name}</p>
+                            </div>
+                            
+                            <div>
+                                <h4 className={styles.modalSectionTitle}>Category</h4>
+                                <p className={styles.modalText}>{selectedService.category}</p>
+                            </div>
+
+                            <div className={styles.modalInfoGrid}>
+                                <div>
+                                    <h4 className={styles.modalSectionTitle}>Rate per 1000</h4>
+                                    <p className={styles.modalText} style={{ color: '#16a34a', fontWeight: 'bold' }}>
+                                        ₹{selectedService.rate.toFixed(2)}
+                                    </p>
+                                </div>
+                                <div>
+                                    <h4 className={styles.modalSectionTitle}>Average Time</h4>
+                                    <p className={styles.modalText}>{selectedService.averageTime || '30 mins - 1 hour'}</p>
+                                </div>
+                            </div>
+
+                            <div className={styles.modalInfoGrid}>
+                                <div>
+                                    <h4 className={styles.modalSectionTitle}>Min Order</h4>
+                                    <p className={styles.modalText}>{selectedService.min}</p>
+                                </div>
+                                <div>
+                                    <h4 className={styles.modalSectionTitle}>Max Order</h4>
+                                    <p className={styles.modalText}>{selectedService.max.toLocaleString()}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className={styles.modalFooter}>
+                            <button className={styles.modalCloseActionBtn} onClick={() => setSelectedService(null)}>
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
