@@ -20,7 +20,9 @@ import {
     ArrowRight,
     TrendingUp,
     PhoneCall,
-    Bookmark
+    Bookmark,
+    Menu,
+    X
 } from "lucide-react";
 
 export default function GuestLanding() {
@@ -29,6 +31,7 @@ export default function GuestLanding() {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const [activeTab, setActiveTab] = useState("Instagram");
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const { login } = useAuth();
 
     const handleGoogleCredentialResponse = async (response: any) => {
@@ -196,6 +199,32 @@ export default function GuestLanding() {
                         Sign up <ArrowRight size={16} />
                     </Link>
                 </div>
+                <button 
+                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)} 
+                    className={styles.hamburger}
+                    aria-label="Toggle Menu"
+                >
+                    {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                </button>
+
+                {/* Mobile Menu Dropdown */}
+                {mobileMenuOpen && (
+                    <div className={styles.mobileMenu}>
+                        <Link href="/login" className={styles.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>Sign in</Link>
+                        <Link href="/services" className={styles.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>Services</Link>
+                        <Link href="/api-docs" className={styles.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>API</Link>
+                        <Link href="/blog" className={styles.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>Blog</Link>
+                        <Link href="/terms" className={styles.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>Terms</Link>
+                        <div className={styles.mobileMenuActions}>
+                            <Link href="/login" className={styles.signInOutline} style={{ justifyContent: "center" }} onClick={() => setMobileMenuOpen(false)}>
+                                Sign in <ArrowRight size={16} />
+                            </Link>
+                            <Link href="/register" className={styles.signUpSolid} style={{ justifyContent: "center" }} onClick={() => setMobileMenuOpen(false)}>
+                                Sign up <ArrowRight size={16} />
+                            </Link>
+                        </div>
+                    </div>
+                )}
             </header>
 
             {/* Split Hero Section with Form on the right (Screenshot 1) */}

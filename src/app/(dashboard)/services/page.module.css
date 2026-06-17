@@ -328,3 +328,70 @@
 .modalCloseActionBtn:hover {
     background-color: #E2E8F0;
 }
+
+/* Services Page Responsiveness */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+    
+    .title {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .controls {
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .searchWrapper,
+    .categoryWrapper {
+        width: 100%;
+        flex: none;
+    }
+    
+    .categorySelect {
+        width: 100%;
+    }
+    
+    .table th,
+    .table td {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.8rem;
+    }
+    
+    .categoryHeaderCell {
+        padding: 0.6rem 0.5rem !important;
+        font-size: 0.85rem;
+    }
+    
+    .nameCol {
+        max-width: 180px;
+        word-wrap: break-word;
+        white-space: normal;
+    }
+    
+    .detailsBtn {
+        padding: 0.35rem 0.6rem;
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .nameCol {
+        max-width: 130px;
+    }
+    
+    .starCol {
+        display: none;
+    }
+    
+    .table th:nth-child(5), /* Min */
+    .table td:nth-child(5),
+    .table th:nth-child(6), /* Max */
+    .table td:nth-child(6) {
+        display: none; /* Hide min/max limits on extra small screens to save space */
+    }
+}
